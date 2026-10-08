@@ -85,6 +85,15 @@ details[open] summary{color:var(--ice)} details p{color:var(--muted)}
 .player iframe{display:block;width:100%;border:0;border-radius:12px;min-height:190px;background:#fff}
 .guest-line{color:var(--ice);font-weight:600}
 
+/* photos */
+.photo-wide{margin:0}
+.photo{margin:0}
+.photo img,.photo-wide img{display:block;width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--line);box-shadow:0 18px 50px rgba(10,15,44,.45)}
+.photo-wide img{aspect-ratio:16/9;object-fit:cover;object-position:50% 30%}
+.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.photo-grid img{aspect-ratio:4/3;object-fit:cover;object-position:50% 25%}
+@media(max-width:700px){.photo-grid{grid-template-columns:1fr}}
+
 /* pagination */
 .pager{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin-top:34px}
 .pager a{min-width:44px;height:44px;padding:0 14px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);
