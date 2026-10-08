@@ -70,6 +70,14 @@ the footer. It leads with the quality of the guests. To name some of them, add e
 `photo` and `url` are optional. Once there is at least one entry, a "Some of our guests" block appears on the media
 kit and the Guests page; until then nothing shows. Only list guests who have agreed to be named and pictured.
 
+### Photos
+
+The site's photos in `assets/img/` are tone-adjusted copies of the untouched originals in `assets/img/source/`
+(brighter, more contrast, slightly richer colour). To change the look, edit the settings in `tools/enhance_photos.py`
+and run it. To add a photo, put the original in `assets/img/source/`, add its name to `PHOTOS` in the script and run it.
+If you edit a photo by hand (for example in Canva), save the finished file into `assets/img/` and remove its name from
+`PHOTOS`, so the script doesn't overwrite it.
+
 ### One-page PDF
 
 `assets/downloads/the-dokkcast-media-kit.pdf` is a designed A4 summary of the media kit, linked from the media kit and
