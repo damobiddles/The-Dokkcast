@@ -6,7 +6,7 @@
 Edit content in pages/, data/site.json and data/episodes.json, never the generated
 root .html files. The generated files are committed so any static host can serve the repo as-is.
 """
-import datetime, email.utils, html, json, re, sys, urllib.request
+import datetime, email.utils, html, json, re, sys, urllib.parse, urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -121,6 +121,12 @@ def _date(s):
     return f"{d.day} {d.strftime('%B %Y')}"
 
 
+def mail_btn(email, label, subject):
+    if not email:
+        return '<span class="note">Contact email to be added.</span>'
+    return f'<a class="btn" href="mailto:{esc(email, True)}?subject={urllib.parse.quote(subject)}">{esc(label)}</a>'
+
+
 def pager_html(cur, total):
     """Newer / page numbers / Older links for the episode pages."""
     if total <= 1:
@@ -158,8 +164,9 @@ def build():
         "footer_nav": "\n".join(f'          <li><a href="{h}">{t}</a></li>' for h, t in NAV),
         "latest_episode": episode_html(eps[0], "h3") if eps else placeholder(
             "<strong>Our first episode is on its way.</strong> Check back soon."),
-        "email_cta": (f'<a class="btn" href="mailto:{esc(site["email"], True)}">Email us</a>' if site["email"]
-                      else '<span class="note">Contact email to be added.</span>'),
+        "email_cta": mail_btn(site["email"], "Email us", "Dokkcast Enquiry"),
+        "email_cta_partner": mail_btn(site["email"], "Discuss a partnership", "Dokkcast Partnership Enquiry"),
+        "email_cta_guest": mail_btn(site["email"], "Get in touch", "Dokkcast Guest Enquiry"),
     }
     per_page = max(1, int(site.get("episodes_per_page", 10)))
     for old in ROOT.glob("episodes-*.html"):  # drop pages left over from a longer feed
