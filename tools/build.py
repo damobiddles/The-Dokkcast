@@ -252,6 +252,9 @@ def build():
         "show_name": site["show_name"], "udokk_url": site["udokk_url"], "year": str(datetime.date.today().year),
         "email": site["email"],
         "contact_line": f'        <p>Press and partnership enquiries:<br>{link("mailto:" + site["email"], site["email"])}</p>' if site["email"] else "",
+        "listen_menu": ('<details class="listen-menu"><summary>Listen</summary><div class="listen-pop">'
+                        + "".join(f'<a href="{esc(u, True)}" rel="noopener">{esc(k)}</a>' for k, u in listen.items())
+                        + "</div></details>") if listen else "",
         "listen_inline": ", ".join(link(u, k) for k, u in listen.items()),
         "producer_link": link(site["producer"]["url"], site["producer"]["name"]) if site.get("producer", {}).get("url") else "",
         "producer_line": (f'        <p>Podcast production and marketing by {link(site["producer"]["url"], site["producer"]["name"])}.</p>'
@@ -315,7 +318,7 @@ def build():
 <meta property="og:description" content="{esc(meta["desc"].strip(), True)}">
 {f'<meta property="og:url" content="{url}">' if url and name != "404.html" else ""}
 <meta property="og:image" content="{og_img}">
-<meta property="og:image:alt" content="The Dokkcast logo on a navy background">
+<meta property="og:image:alt" content="The Dokkcast, an evidence-led health podcast hosted by Dr Nara Daubeney, with two people in conversation in the studio">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(full_title, True)}">
 <meta name="twitter:description" content="{esc(meta["desc"].strip(), True)}">

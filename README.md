@@ -81,6 +81,12 @@ kit and the Guests page; until then nothing shows. Only list guests who have agr
 - `netlify.toml` redirects `www` to the main domain, and short addresses such as `/about` or `/press` to the real pages.
   Keep Netlify's **Pretty URLs** setting off, or those redirects will loop.
 
+### Share image and header menu
+
+`assets/img/og-image.png` (the preview shown when a link is shared) is built by `tools/make_share_image.py` from the logo
+and one of the studio photos. Re-run it to change the photo or wording. The **Listen** menu in the header is built from the
+`listen` links in `data/site.json`; it disappears if none are set.
+
 ### Photos
 
 The site's photos in `assets/img/` are tone-adjusted copies of the untouched originals in `assets/img/source/`

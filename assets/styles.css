@@ -39,6 +39,18 @@ p{margin:0 0 1em} .lead{font-size:1.2rem;color:var(--muted);max-width:44rem}
 .nav a:hover,.nav a[aria-current=page]{color:#fff;background:rgba(117,192,251,.14)}
 .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer}
 
+/* header listen menu */
+.listen-menu{position:relative;margin-left:8px}
+.listen-menu summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;background:var(--grad);color:#08102e;
+  font-weight:800;font-size:.95rem;padding:9px 18px;border-radius:999px}
+.listen-menu summary::-webkit-details-marker{display:none}
+.listen-menu summary::after{content:"";border:5px solid transparent;border-top-color:currentColor;margin-top:5px;transition:transform .15s}
+.listen-menu[open] summary::after{transform:rotate(180deg);margin-top:-5px}
+.listen-pop{position:absolute;right:0;top:calc(100% + 10px);min-width:220px;background:var(--navy);border:1px solid var(--line);
+  border-radius:14px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.45);z-index:60}
+.listen-pop a{display:block;padding:11px 14px;border-radius:10px;color:var(--text);font-weight:700;text-decoration:none}
+.listen-pop a:hover{background:rgba(117,192,251,.14)}
+
 /* buttons */
 .btn{display:inline-block;font:inherit;font-weight:700;text-decoration:none;border-radius:999px;padding:13px 26px;cursor:pointer;border:0;
   background:var(--grad);color:#08102e;transition:transform .15s,box-shadow .15s}
@@ -69,9 +81,9 @@ ul.ticks li::before{content:"";position:absolute;left:0;top:.55em;width:14px;hei
 .placeholder{border:1px dashed var(--sky);border-radius:var(--radius);padding:22px;color:var(--muted);background:rgba(117,192,251,.06)}
 
 ul.cols{columns:2;column-gap:36px}ul.cols li{break-inside:avoid}
-details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 20px;margin-bottom:12px}
-summary{cursor:pointer;font-weight:700;padding:14px 0;list-style-position:outside}
-details[open] summary{color:var(--ice)} details p{color:var(--muted)}
+main details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 20px;margin-bottom:12px}
+main summary{cursor:pointer;font-weight:700;padding:14px 0;list-style-position:outside}
+main details[open] summary{color:var(--ice)} main details p{color:var(--muted)}
 @media(max-width:560px){ul.cols{columns:1}}
 
 /* episodes */
@@ -154,13 +166,19 @@ details[open] summary{color:var(--ice)} details p{color:var(--muted)}
   .card,.panel{padding:20px}
   .btn-row .btn{flex:1 1 auto;text-align:center}   /* buttons share each row evenly */
 }
-@media(max-width:860px){
-  .hero-grid,.split,.foot-grid{grid-template-columns:1fr}
-  .hero-logo{order:-1;justify-content:flex-start} .hero-logo img{width:150px}
+/* the header switches to the menu button below 940px, which is where six links plus Listen stop fitting on one line */
+@media(max-width:940px){
   .menu-btn{display:block}
   .nav{display:none;position:absolute;left:0;right:0;top:72px;flex-direction:column;align-items:stretch;background:var(--navy);padding:14px 20px 20px;border-bottom:1px solid var(--line)}
   .nav.open{display:flex;max-height:calc(100vh - 72px);max-height:calc(100dvh - 72px);overflow-y:auto;overscroll-behavior:contain}
   .nav a{padding:12px 14px}
+  .listen-menu{margin:8px 0 0}
+  .listen-menu summary{display:flex;justify-content:center;padding:14px}
+  .listen-pop{position:static;box-shadow:none;margin-top:8px;min-width:0}
+}
+@media(max-width:860px){
+  .hero-grid,.split,.foot-grid{grid-template-columns:1fr}
+  .hero-logo{order:-1;justify-content:flex-start} .hero-logo img{width:150px}
   .site-footer li{margin-bottom:0}
   .site-footer a{display:inline-block;padding:9px 0}
   .legal-line a{padding:9px 6px 9px 0}
