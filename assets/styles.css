@@ -60,6 +60,7 @@ section{padding:clamp(48px,8vw,96px) 0}
 .portrait{aspect-ratio:4/5;border-radius:var(--radius);border:1px dashed var(--line);display:grid;place-items:center;text-align:center;color:var(--muted);
   background:var(--card);padding:20px;overflow:hidden}
 .portrait img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius)}
+.portrait.photo{aspect-ratio:1;max-width:440px;width:100%;margin:0;padding:0;border:1px solid var(--line);box-shadow:0 20px 60px rgba(113,107,232,.25)}
 ul.ticks{list-style:none;padding:0;margin:0 0 1em}
 ul.ticks li{padding-left:30px;margin-bottom:.6em;position:relative}
 ul.ticks li::before{content:"";position:absolute;left:0;top:.55em;width:14px;height:8px;border-left:3px solid var(--sky);border-bottom:3px solid var(--sky);transform:rotate(-45deg)}
