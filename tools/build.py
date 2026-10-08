@@ -92,7 +92,11 @@ def episode_html(e, heading="h3"):
         sys.exit(f"episode '{e.get('title')}': acast_embed must start with one of {EMBED_HOSTS}")
     meta = " &middot; ".join(x for x in (f"Episode {e['number']}" if e.get("number") else "",
                                          _date(e.get("date"))) if x)
-    out = ['<article class="episode">']
+    art = f'<figure class="ep-art"><img src="{esc(e["image"], True)}" alt="{esc(e.get("image_alt", ""), True)}" width="140" height="140" loading="lazy"></figure>' if e.get("image") else ""
+    out = [f'<article class="episode{" has-art" if art else ""}">']
+    if art:
+        out.append(art)
+    out.append('<div class="ep-body">')
     if meta:
         out.append(f'<div class="meta">{meta}</div>')
     out.append(f"<{heading}>{esc(e['title'])}</{heading}>")
@@ -100,13 +104,12 @@ def episode_html(e, heading="h3"):
         out.append(f'<p class="guest-line">With {esc(e["guest"])}</p>')
     if e.get("summary"):
         out.append(f"<p>{esc(e['summary'])}</p>")
-    if e.get("image"):
-        out.append(f'<figure><img src="{esc(e["image"], True)}" alt="{esc(e.get("image_alt", ""), True)}" loading="lazy"></figure>')
+    out.append("</div>")
     if e.get("acast_embed"):
-        out.append(f'<iframe src="{esc(e["acast_embed"], True)}" title="Listen: {esc(e["title"], True)}" loading="lazy" '
-                   f'allow="autoplay" height="190"></iframe>')
+        out.append(f'<div class="player"><iframe src="{esc(e["acast_embed"], True)}" title="Listen: {esc(e["title"], True)}" loading="lazy" '
+                   f'allow="autoplay" height="190"></iframe></div>')
     elif e.get("link"):
-        out.append(f'<p><a class="btn ghost" href="{esc(e["link"], True)}" rel="noopener">Listen on Acast</a></p>')
+        out.append(f'<div class="player"><a class="btn ghost" href="{esc(e["link"], True)}" rel="noopener">Listen on Acast</a></div>')
     out.append("</article>")
     return "\n".join(out)
 
