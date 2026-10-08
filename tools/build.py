@@ -6,7 +6,7 @@
 Edit content in pages/, data/site.json and data/episodes.json, never the generated
 root .html files. The generated files are committed so any static host can serve the repo as-is.
 """
-import datetime, email.utils, html, json, re, sys, urllib.parse, urllib.request
+import datetime, email.utils, glob, html, json, re, sys, urllib.parse, urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -143,6 +143,79 @@ def guest_showcase_html(heading="Some of our guests"):
 </section>'''
 
 
+def href_of(h):
+    """Home is linked as './' so the site has one address for it, not index.html as well."""
+    return "./" if h == "index.html" else h
+
+
+def responsive_images(doc):
+    """Wrap local photos in <picture> with WebP variants (NAME-<width>.webp) when they exist."""
+    def repl(m):
+        name, rest = m.group(1), m.group(2)
+        variants = sorted(((int(re.search(r"-(\d+)\.webp$", f).group(1)), f) for f in glob.glob(str(ROOT / f"assets/img/{name}-*.webp"))))
+        if len(variants) < 2:
+            return m.group(0)
+        srcset = ", ".join(f"assets/img/{Path(f).name} {w}w" for w, f in variants)
+        return (f'<picture><source type="image/webp" srcset="{srcset}" sizes="(max-width: 700px) calc(100vw - 40px), 1120px">'
+                f'<img src="assets/img/{name}.jpg"{rest}></picture>')
+    return re.sub(r'<img src="assets/img/([\w-]+)\.jpg"([^>]*)>', repl, doc)
+
+
+def plain(s):
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", s))).strip()
+
+
+def jsonld(site, name, title, meta, body, chunk):
+    """Structured data for a page, as a <script type="application/ld+json"> block ('' if no site_url yet)."""
+    if not site.get("site_url"):
+        return ""
+    base = site["site_url"].rstrip("/")
+    show = site["show_name"]
+    nara = {"@type": "Person", "name": "Dr Nara Daubeney", "url": f"{base}/dr-nara-daubeney.html"}
+    series = {"@type": "PodcastSeries", "name": show, "url": f"{base}/", "description": site.get("description", ""),
+              "image": f"{base}/assets/img/og-image.png", "author": nara,
+              "publisher": {"@type": "Organization", "name": "Udokk Ltd", "url": site["udokk_url"]}}
+    if site.get("rss_url"):
+        series["webFeed"] = site["rss_url"]
+    same = [u for u in site["listen"].values() if u]
+    if same:
+        series["sameAs"] = same
+    nodes = []
+    if name == "index.html":
+        nodes.append({**series})
+    if name == "dr-nara-daubeney.html":
+        nodes.append({"@type": "Person", "name": "Dr Nara Daubeney", "honorificPrefix": "Dr", "jobTitle": "Consultant ENT surgeon",
+                      "url": f"{base}/dr-nara-daubeney.html", "image": f"{base}/assets/img/nara.jpg",
+                      "description": "Consultant ENT surgeon and entrepreneur based in London, and host of The Dokkcast.",
+                      "alumniOf": {"@type": "CollegeOrUniversity", "name": "Imperial College London"},
+                      "knowsAbout": ["ENT surgery", "Immunology", "Autoimmunity"]})
+    if name == "about.html":
+        qa = re.findall(r"<details><summary>(.*?)</summary><p>(.*?)</p></details>", body, re.S)
+        if qa:
+            nodes.append({"@type": "FAQPage", "mainEntity": [
+                {"@type": "Question", "name": plain(q), "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in qa]})
+    if name.startswith("episodes"):
+        for e in chunk:
+            ep = {"@type": "PodcastEpisode", "name": e["title"], "url": e.get("link") or f"{base}/episodes.html",
+                  "partOfSeries": {"@type": "PodcastSeries", "name": show, "url": f"{base}/"}}
+            if e.get("date"):
+                ep["datePublished"] = e["date"]
+            if e.get("summary"):
+                ep["description"] = e["summary"]
+            nodes.append(ep)
+    if name not in ("index.html", "404.html"):
+        crumbs = [("Home", f"{base}/")]
+        if name == "media-kit.html":
+            crumbs.append(("Sponsors & Partners", f"{base}/partners.html"))
+        crumbs.append((meta["title"].strip(), f"{base}/{name}"))
+        nodes.append({"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]})
+    if not nodes:
+        return ""
+    data = {"@context": "https://schema.org", "@graph": nodes}
+    return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
+
+
 def mail_btn(email, label, subject):
     if not email:
         return '<span class="note">Contact email to be added.</span>'
@@ -187,7 +260,7 @@ def build():
                         or "          <li>Episodes coming soon.</li>",
         "listen_buttons": "\n".join(f'<a class="btn ghost" href="{esc(u, True)}" rel="noopener">{esc(k)}</a>' for k, u in listen.items()),
         "social_items": "\n".join(f"<li>{link(u, k)}</li>" for k, u in social.items()),
-        "footer_nav": "\n".join(f'          <li><a href="{h}">{t}</a></li>' for h, t in NAV + EXTRA_PAGES),
+        "footer_nav": "\n".join(f'          <li><a href="{href_of(h)}">{t}</a></li>' for h, t in NAV + EXTRA_PAGES),
         "guest_showcase": guest_showcase_html(),
         "latest_episode": episode_html(eps[0], "h3") if eps else placeholder(
             "<strong>Our first episode is on its way.</strong> Check back soon."),
@@ -211,16 +284,17 @@ def build():
             chunks = [eps[i:i + per_page] for i in range(0, len(eps), per_page)] or [[]]
             for i, chunk in enumerate(chunks):
                 extra = {"episodes_list": "\n".join(episode_html(e, "h2") for e in chunk) or no_eps,
-                         "pager": pager_html(i + 1, len(chunks))}
+                         "pager": pager_html(i + 1, len(chunks)), "_chunk": chunk}
                 jobs.append(("episodes.html" if i == 0 else f"episodes-{i + 1}.html", "episodes.html", meta, body, extra, i + 1))
         else:
             jobs.append((src.name, NAV_PARENT.get(src.name, src.name), meta, body, {}, 1))
     built = []
     for name, nav_name, meta, body, extra, pageno in jobs:
-        nav = "\n".join('      <a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == nav_name else "", t) for h, t in NAV)
-        page_tokens = {**tokens, **extra, "nav": nav}
+        nav = "\n".join('      <a href="%s"%s>%s</a>' % (href_of(h), ' aria-current="page"' if h == nav_name else "", t) for h, t in NAV)
+        chunk = extra.get("_chunk", [])
+        page_tokens = {**tokens, **{k: v for k, v in extra.items() if not k.startswith("_")}, "nav": nav}
         title = meta["title"].strip() + (f" (page {pageno})" if pageno > 1 else "")
-        full_title = site["show_name"] if name == "index.html" else f"{title} | {site['show_name']}"
+        full_title = meta["fulltitle"].strip() if meta.get("fulltitle") else (site["show_name"] if name == "index.html" else f"{title} | {site['show_name']}")
         url = f'{site["site_url"].rstrip("/")}/{"" if name == "index.html" else name}' if site["site_url"] else ""
         og_img = f'{site["site_url"].rstrip("/")}/assets/img/og-image.png' if site["site_url"] else "assets/img/og-image.png"
         head = f'''<!doctype html>
@@ -235,12 +309,22 @@ def build():
 {f'<link rel="canonical" href="{url}">' if url and name != "404.html" else ""}
 {'<meta name="robots" content="noindex">' if name == "404.html" else ""}
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_GB">
 <meta property="og:site_name" content="{esc(site["show_name"], True)}">
 <meta property="og:title" content="{esc(full_title, True)}">
 <meta property="og:description" content="{esc(meta["desc"].strip(), True)}">
+{f'<meta property="og:url" content="{url}">' if url and name != "404.html" else ""}
 <meta property="og:image" content="{og_img}">
+<meta property="og:image:alt" content="The Dokkcast logo on a navy background">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{esc(full_title, True)}">
+<meta name="twitter:description" content="{esc(meta["desc"].strip(), True)}">
+<meta name="twitter:image" content="{og_img}">
+{f'<link rel="alternate" type="application/rss+xml" title="{esc(site["show_name"], True)} podcast feed" href="{esc(site["rss_url"], True)}">' if site.get("rss_url") and name != "404.html" else ""}
+<link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" href="assets/img/udokk-logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+{jsonld(site, name, title, meta, body, chunk)}
 <link rel="preload" href="assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -250,6 +334,7 @@ def build():
               '\n<script src="assets/site.js" defer></script>\n</body>\n</html>\n'
         for k, v in page_tokens.items():
             doc = doc.replace("{{" + k + "}}", v)
+        doc = responsive_images(doc)
         left = re.findall(r"\{\{(\w+)\}\}", doc)
         if left:
             sys.exit(f"{name}: unknown tokens {left}")

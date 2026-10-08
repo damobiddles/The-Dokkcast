@@ -4,6 +4,67 @@
   command = "python3 tools/build.py"
   publish = "."
 
+# One canonical address for each page: send www to the main domain, and common short or extensionless
+# addresses to the real page, so typed or shared links never hit a 404.
+[[redirects]]
+  from = "https://www.thedokkcast.com/*"
+  to = "https://thedokkcast.com/:splat"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 301
+[[redirects]]
+  from = "/episodes"
+  to = "/episodes.html"
+  status = 301
+[[redirects]]
+  from = "/guests"
+  to = "/guests.html"
+  status = 301
+[[redirects]]
+  from = "/guest"
+  to = "/guests.html"
+  status = 301
+[[redirects]]
+  from = "/partners"
+  to = "/partners.html"
+  status = 301
+[[redirects]]
+  from = "/sponsors"
+  to = "/partners.html"
+  status = 301
+[[redirects]]
+  from = "/media-kit"
+  to = "/media-kit.html"
+  status = 301
+[[redirects]]
+  from = "/mediakit"
+  to = "/media-kit.html"
+  status = 301
+[[redirects]]
+  from = "/press"
+  to = "/media-kit.html"
+  status = 301
+[[redirects]]
+  from = "/dr-nara-daubeney"
+  to = "/dr-nara-daubeney.html"
+  status = 301
+[[redirects]]
+  from = "/dr-nara"
+  to = "/dr-nara-daubeney.html"
+  status = 301
+[[redirects]]
+  from = "/nara"
+  to = "/dr-nara-daubeney.html"
+  status = 301
+
 # Keep source folders out of the public site.
 [[redirects]]
   from = "/pages/*"

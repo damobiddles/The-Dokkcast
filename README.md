@@ -70,10 +70,22 @@ the footer. It leads with the quality of the guests. To name some of them, add e
 `photo` and `url` are optional. Once there is at least one entry, a "Some of our guests" block appears on the media
 kit and the Guests page; until then nothing shows. Only list guests who have agreed to be named and pictured.
 
+### SEO and checks
+
+- Every page gets a canonical URL, Open Graph and Twitter tags, a favicon set and structured data (`PodcastSeries` on the
+  home page, `Person` for Dr Nara, `FAQPage` on About, `PodcastEpisode` entries on the Episodes pages, and breadcrumbs).
+  The Acast feed is advertised in the page head so podcast apps and search engines can find it.
+- Page titles and descriptions come from the `<!--meta ... -->` block at the top of each file in `pages/` (home also has `fulltitle:`).
+- `python3 tools/audit_site.py` checks the built pages for broken links and images, missing alt text, title and
+  description lengths, heading order, social tags and structured data. It should report no issues before you publish.
+- `netlify.toml` redirects `www` to the main domain, and short addresses such as `/about` or `/press` to the real pages.
+  Keep Netlify's **Pretty URLs** setting off, or those redirects will loop.
+
 ### Photos
 
 The site's photos in `assets/img/` are tone-adjusted copies of the untouched originals in `assets/img/source/`
-(brighter, more contrast, slightly richer colour). To change the look, edit the settings in `tools/enhance_photos.py`
+(brighter, more contrast, slightly richer colour). The same script also writes small WebP versions
+(`name-720.webp` and a full-size one) that `build.py` serves to phones through `<picture>`. To change the look, edit the settings in `tools/enhance_photos.py`
 and run it. To add a photo, put the original in `assets/img/source/`, add its name to `PHOTOS` in the script and run it.
 If you edit a photo by hand (for example in Canva), save the finished file into `assets/img/` and remove its name from
 `PHOTOS`, so the script doesn't overwrite it.

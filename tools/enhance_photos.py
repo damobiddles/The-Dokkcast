@@ -54,4 +54,10 @@ if __name__ == "__main__":
         src = Image.open(SRC / f"{name}.jpg")
         out = enhance(src, **opts)
         out.save(DST / f"{name}.jpg", quality=84, optimize=True, progressive=True)
+        if name != "nara":                      # small WebP versions for phones and full-size for desktop (see build.py)
+            for old in DST.glob(f"{name}-*.webp"):
+                old.unlink()
+            for w in sorted({min(720, out.width), out.width}):
+                img = out if w == out.width else out.resize((w, round(out.height * w / out.width)), Image.LANCZOS)
+                img.save(DST / f"{name}-{w}.webp", quality=80, method=6)
         print(f"{name:26s} before: {stats(src)}   after: {stats(out)}")
