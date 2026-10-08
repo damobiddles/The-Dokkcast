@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parent.parent
 NAV = [("index.html", "Home"), ("episodes.html", "Episodes"), ("about.html", "About"),
        ("dr-nara-daubeney.html", "Dr Nara Daubeney"), ("partners.html", "Sponsors &amp; Partners"),
        ("guests.html", "Guests")]
+EXTRA_PAGES = [("media-kit.html", "Media kit")]  # linked from the footer and sitemap, not the header
+NAV_PARENT = {"media-kit.html": "partners.html"}  # which header item stays highlighted
 EMBED_HOSTS = ("https://embed.acast.com/", "https://shows.acast.com/", "https://sphinx.acast.com/")
 esc = html.escape
 
@@ -121,6 +123,25 @@ def _date(s):
     return f"{d.day} {d.strftime('%B %Y')}"
 
 
+def media_stats_html():
+    """Audience figures from data/mediakit.json. Shown only once real values are filled in."""
+    kit = load("mediakit.json")
+    stats = [s for s in kit.get("stats", []) if str(s.get("value", "")).strip()]
+    if not stats:
+        return ""
+    cards = "\n".join(f'<div class="stat"><strong>{esc(str(s["value"]))}</strong><span>{esc(s["label"])}</span></div>' for s in stats)
+    as_of = f'<p class="note">Figures as of {esc(kit["as_of"])}.</p>' if kit.get("as_of") else ""
+    return f'''<section style="padding-top:0">
+  <div class="wrap">
+    <h2>Audience in numbers</h2>
+    <div class="stats">
+{cards}
+    </div>
+    {as_of}
+  </div>
+</section>'''
+
+
 def mail_btn(email, label, subject):
     if not email:
         return '<span class="note">Contact email to be added.</span>'
@@ -157,13 +178,16 @@ def build():
         "show_name": site["show_name"], "udokk_url": site["udokk_url"], "year": str(datetime.date.today().year),
         "email": site["email"],
         "contact_line": f'        <p>Press and partnership enquiries:<br>{link("mailto:" + site["email"], site["email"])}</p>' if site["email"] else "",
+        "listen_inline": ", ".join(link(u, k) for k, u in listen.items()),
+        "producer_link": link(site["producer"]["url"], site["producer"]["name"]) if site.get("producer", {}).get("url") else "",
         "producer_line": (f'        <p>Podcast production and marketing by {link(site["producer"]["url"], site["producer"]["name"])}.</p>'
                           if site.get("producer", {}).get("url") else ""),
         "listen_items": "\n".join(f"          <li>{link(u, k)}</li>" for k, u in listen.items())
                         or "          <li>Episodes coming soon.</li>",
         "listen_buttons": "\n".join(f'<a class="btn ghost" href="{esc(u, True)}" rel="noopener">{esc(k)}</a>' for k, u in listen.items()),
         "social_items": "\n".join(f"<li>{link(u, k)}</li>" for k, u in social.items()),
-        "footer_nav": "\n".join(f'          <li><a href="{h}">{t}</a></li>' for h, t in NAV),
+        "footer_nav": "\n".join(f'          <li><a href="{h}">{t}</a></li>' for h, t in NAV + EXTRA_PAGES),
+        "media_stats": media_stats_html(),
         "latest_episode": episode_html(eps[0], "h3") if eps else placeholder(
             "<strong>Our first episode is on its way.</strong> Check back soon."),
         "email_cta": mail_btn(site["email"], "Email us", "Dokkcast Enquiry"),
@@ -189,7 +213,7 @@ def build():
                          "pager": pager_html(i + 1, len(chunks))}
                 jobs.append(("episodes.html" if i == 0 else f"episodes-{i + 1}.html", "episodes.html", meta, body, extra, i + 1))
         else:
-            jobs.append((src.name, src.name, meta, body, {}, 1))
+            jobs.append((src.name, NAV_PARENT.get(src.name, src.name), meta, body, {}, 1))
     built = []
     for name, nav_name, meta, body, extra, pageno in jobs:
         nav = "\n".join('      <a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == nav_name else "", t) for h, t in NAV)
@@ -233,7 +257,7 @@ def build():
         print("built", name)
     if site["site_url"]:
         base = site["site_url"].rstrip("/")
-        urls = "".join(f"  <url><loc>{base}/{'' if h == 'index.html' else h}</loc></url>\n" for h in [h for h, _ in NAV] + [n for n in built if n.startswith("episodes-")])
+        urls = "".join(f"  <url><loc>{base}/{'' if h == 'index.html' else h}</loc></url>\n" for h in [h for h, _ in NAV + EXTRA_PAGES] + [n for n in built if n.startswith("episodes-")])
         (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n")
         (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n")
 

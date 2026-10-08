@@ -87,6 +87,26 @@ details[open] summary{color:var(--ice)} details p{color:var(--muted)}
 
 .creds{color:var(--ice);font-weight:700;font-size:.95rem;letter-spacing:.01em;margin:-.2rem 0 1rem}
 
+/* media kit */
+.glance{display:grid;grid-template-columns:200px 1fr;gap:0;margin:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+.glance dt,.glance dd{margin:0;padding:16px 22px;border-top:1px solid var(--line)}
+.glance dt:first-of-type,.glance dd:first-of-type{border-top:0}
+.glance dt{font-weight:800;color:var(--ice)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;text-align:center}
+.stat strong{display:block;font-size:clamp(2rem,5vw,2.8rem);font-weight:800;line-height:1.1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{color:var(--muted);font-weight:600}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.swatch{border-radius:14px;padding:44px 16px 14px;font-weight:700;font-size:.9rem;border:1px solid var(--line)}
+.swatch small{display:block;font-weight:500;opacity:.8}
+.logo-tile{background:linear-gradient(160deg,#0a0f2c,#251a63);border:1px solid var(--line);border-radius:var(--radius);padding:30px;display:grid;place-items:center}
+.logo-tile img{width:130px;height:auto}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:14px}
+.steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px 16px 62px;position:relative}
+.steps li::before{content:counter(s);position:absolute;left:18px;top:14px;width:30px;height:30px;border-radius:50%;background:var(--grad);color:#08102e;font-weight:800;display:grid;place-items:center}
+.steps strong{color:var(--text)}
+@media(max-width:700px){.glance{grid-template-columns:1fr}.glance dt{padding-bottom:0;border-top:1px solid var(--line)}.glance dd{border-top:0;padding-top:4px}}
+
 /* photos */
 .photo-wide{margin:0}
 .photo{margin:0}
