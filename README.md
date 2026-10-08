@@ -70,6 +70,19 @@ the footer. It leads with the quality of the guests. To name some of them, add e
 `photo` and `url` are optional. Once there is at least one entry, a "Some of our guests" block appears on the media
 kit and the Guests page; until then nothing shows. Only list guests who have agreed to be named and pictured.
 
+### One-page PDF
+
+`assets/downloads/the-dokkcast-media-kit.pdf` is a designed A4 summary of the media kit, linked from the media kit and
+Partners pages. It is built by `tools/make_pdf.py` from `data/site.json` and `data/guests.json` (links, email, named guests),
+so re-run it and commit the new PDF whenever those change or the wording in the script is updated:
+
+```bash
+pip install playwright && playwright install chromium
+python3 tools/make_pdf.py          # set CHROMIUM_PATH to use a browser you already have
+```
+
+Netlify does not build the PDF (it needs a browser), so the committed file is what visitors download.
+
 ### Still to fill in
 
 Search the `pages/` folder for `class="placeholder"`. These need real content:
