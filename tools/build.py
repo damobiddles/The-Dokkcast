@@ -6,7 +6,8 @@
 Edit content in pages/, data/site.json and data/episodes.json, never the generated
 root .html files. The generated files are committed so any static host can serve the repo as-is.
 """
-import datetime, html, json, re, sys
+import datetime, email.utils, html, json, re, sys, urllib.request
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -23,6 +24,67 @@ def load(name):
 
 def link(url, label):
     return f'<a href="{esc(url, True)}" rel="noopener">{esc(label)}</a>'
+
+
+def _local(tag):
+    return tag.rsplit("}", 1)[-1]
+
+
+def _text(html_text, limit=320):
+    t = re.sub(r"<[^>]+>", " ", html.unescape(html_text or ""))
+    t = re.sub(r"\s+", " ", t).strip()
+    t = re.sub(r"\s+([.,;:!?])", r"\1", t)
+    return t if len(t) <= limit else t[:limit].rsplit(" ", 1)[0] + "\u2026"
+
+
+def parse_feed(xml_text, feed_url=""):
+    """Podcast RSS -> episode dicts in the same shape as data/episodes.json."""
+    chan = ET.fromstring(xml_text).find("channel")
+    m = re.search(r"/([0-9a-f]{24})/?$", feed_url)
+    show_hint = m.group(1) if m else ""
+    eps = []
+    for item in chan.findall("item"):
+        f = {}
+        for c in item:
+            k = _local(c.tag)
+            if k == "image":
+                f.setdefault("image", c.get("href"))
+            elif k not in f:
+                f[k] = (c.text or "").strip()
+        if not f.get("title"):
+            continue
+        guid = f.get("guid", "")
+        show_id = f.get("showId") or show_hint
+        ep_id = f.get("episodeId") or (guid if re.fullmatch(r"[0-9a-f]{24}", guid) else "")
+        e = {"title": _text(f["title"], 200), "summary": _text(f.get("summary") or f.get("description"))}
+        try:
+            e["date"] = email.utils.parsedate_to_datetime(f["pubDate"]).date().isoformat()
+        except (KeyError, TypeError, ValueError):
+            pass
+        if f.get("episode", "").isdigit():
+            e["number"] = int(f["episode"])
+        if show_id and ep_id:
+            e["acast_embed"] = f"https://embed.acast.com/{show_id}/{ep_id}"
+        if f.get("link", "").startswith("https://") and "acast.com" in f["link"].split("/")[2]:
+            e["link"] = f["link"]
+        if (f.get("image") or "").startswith("https://"):
+            e["image"] = f["image"]
+            e["image_alt"] = ""
+        eps.append(e)
+    return eps
+
+
+def fetch_episodes(url):
+    """Episodes from the RSS feed, or None if it can't be read (the build must never fail on this)."""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "dokkcast-site-build"})
+        with urllib.request.urlopen(req, timeout=25) as r:
+            eps = parse_feed(r.read().decode("utf-8"), url)
+        print(f"feed: {len(eps)} episodes from {url}")
+        return eps
+    except Exception as ex:  # network, XML, anything
+        print(f"feed: could not read {url} ({ex}); using data/episodes.json", file=sys.stderr)
+        return None
 
 
 def episode_html(e, heading="h3"):
@@ -43,6 +105,8 @@ def episode_html(e, heading="h3"):
     if e.get("acast_embed"):
         out.append(f'<iframe src="{esc(e["acast_embed"], True)}" title="Listen: {esc(e["title"], True)}" loading="lazy" '
                    f'allow="autoplay" height="190"></iframe>')
+    elif e.get("link"):
+        out.append(f'<p><a class="btn ghost" href="{esc(e["link"], True)}" rel="noopener">Listen on Acast</a></p>')
     out.append("</article>")
     return "\n".join(out)
 
@@ -55,7 +119,8 @@ def _date(s):
 
 
 def build():
-    site, eps = load("site.json"), load("episodes.json")
+    site = load("site.json")
+    eps = (fetch_episodes(site["rss_url"]) if site.get("rss_url") else None) or load("episodes.json")
     eps = sorted(eps, key=lambda e: e.get("date", ""), reverse=True)
     listen = {k: v for k, v in site["listen"].items() if v}
     social = {k: v for k, v in site["social"].items() if v}

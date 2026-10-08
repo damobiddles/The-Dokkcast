@@ -1,5 +1,7 @@
 # Netlify settings for The Dokkcast. The generated HTML is committed, so no build step is needed.
 [build]
+  # Rebuilds the pages from the Acast feed on every deploy. The build never fails if the feed is down.
+  command = "python3 tools/build.py"
   publish = "."
 
 # Keep source folders out of the public site.

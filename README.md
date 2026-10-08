@@ -22,7 +22,15 @@ python3 tools/build.py      # needs Python 3 only, no packages
 
 Never edit the root `*.html` files by hand. They're generated and get overwritten.
 
-### Adding an episode (Acast)
+### Episodes come from the Acast feed
+
+`rss_url` in `data/site.json` points at the Acast RSS feed. Every build reads it and generates the
+Episodes page and the home-page player automatically, so a new episode only needs the site rebuilding
+(a Netlify deploy does this; use a Netlify build hook to trigger one on a schedule). If the feed can't
+be read, the build carries on and uses `data/episodes.json` instead. That file is also the way to run
+the site without a feed.
+
+### Adding an episode by hand (Acast)
 
 In Acast, open the episode, choose **Share / Embed**, and copy the player link (it starts with
 `https://embed.acast.com/`). Then add an entry to `data/episodes.json`:
