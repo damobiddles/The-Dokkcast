@@ -30,6 +30,9 @@ Episodes page and the home-page player automatically, so a new episode only need
 be read, the build carries on and uses `data/episodes.json` instead. That file is also the way to run
 the site without a feed.
 
+The Episodes page shows 10 episodes per page (`episodes_per_page` in `data/site.json`), with
+Newer / Older links and page numbers. Extra pages (`episodes-2.html`, ...) are generated automatically.
+
 ### Adding an episode by hand (Acast)
 
 In Acast, open the episode, choose **Share / Embed**, and copy the player link (it starts with

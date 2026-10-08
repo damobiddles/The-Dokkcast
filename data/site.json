@@ -15,5 +15,6 @@
     "X": "",
     "YouTube": ""
   },
-  "rss_url": "https://feeds.acast.com/public/shows/6a9feaddf9c5c14b7e34ba44"
+  "rss_url": "https://feeds.acast.com/public/shows/6a9feaddf9c5c14b7e34ba44",
+  "episodes_per_page": 10
 }

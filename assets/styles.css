@@ -78,6 +78,14 @@ ul.ticks li::before{content:"";position:absolute;left:0;top:.55em;width:14px;hei
 .player iframe{display:block;width:100%;border:0;border-radius:12px;min-height:190px;background:#fff}
 .guest-line{color:var(--ice);font-weight:600}
 
+/* pagination */
+.pager{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin-top:34px}
+.pager a{min-width:44px;height:44px;padding:0 14px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);
+  border-radius:999px;color:var(--text);text-decoration:none;font-weight:700;background:var(--card)}
+.pager a:hover{border-color:var(--sky)}
+.pager a[aria-current=page]{background:var(--grad);color:#08102e;border-color:transparent}
+.pager .gap{color:var(--muted);padding:0 4px}
+
 /* footer */
 .site-footer{border-top:1px solid var(--line);padding:44px 0 32px;margin-top:40px;color:var(--muted);font-size:.95rem}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}

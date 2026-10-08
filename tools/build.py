@@ -121,6 +121,22 @@ def _date(s):
     return f"{d.day} {d.strftime('%B %Y')}"
 
 
+def pager_html(cur, total):
+    """Newer / page numbers / Older links for the episode pages."""
+    if total <= 1:
+        return ""
+    href = lambda n: "episodes.html" if n == 1 else f"episodes-{n}.html"
+    items, prev = [], 0
+    for n in [n for n in range(1, total + 1) if n in (1, total) or abs(n - cur) <= 1]:
+        if n - prev > 1:
+            items.append('<span class="gap" aria-hidden="true">&hellip;</span>')
+        items.append('<a href="%s"%s aria-label="Page %d">%d</a>' % (href(n), ' aria-current="page"' if n == cur else "", n, n))
+        prev = n
+    newer = f'<a class="step" href="{href(cur - 1)}" rel="prev">&larr; Newer</a>' if cur > 1 else ""
+    older = f'<a class="step" href="{href(cur + 1)}" rel="next">Older &rarr;</a>' if cur < total else ""
+    return f'<nav class="pager" aria-label="Episode pages">{newer}{"".join(items)}{older}</nav>'
+
+
 def build():
     site = load("site.json")
     eps = (fetch_episodes(site["rss_url"]) if site.get("rss_url") else None) or load("episodes.json")
@@ -142,11 +158,14 @@ def build():
         "footer_nav": "\n".join(f'          <li><a href="{h}">{t}</a></li>' for h, t in NAV),
         "latest_episode": episode_html(eps[0], "h3") if eps else placeholder(
             "<strong>Our first episode is on its way.</strong> Check back soon."),
-        "episodes_list": "\n".join(episode_html(e, "h2") for e in eps) if eps else placeholder(
-            "<strong>No episodes published yet.</strong> They'll appear here as soon as they're released."),
         "email_cta": (f'<a class="btn" href="mailto:{esc(site["email"], True)}">Email us</a>' if site["email"]
                       else '<span class="note">Contact email to be added.</span>'),
     }
+    per_page = max(1, int(site.get("episodes_per_page", 10)))
+    for old in ROOT.glob("episodes-*.html"):  # drop pages left over from a longer feed
+        old.unlink()
+    no_eps = placeholder("<strong>No episodes published yet.</strong> They'll appear here as soon as they're released.")
+    jobs = []  # (output name, nav highlight, meta, body, extra tokens, page number)
     for src in sorted((ROOT / "pages").glob("*.html")):
         text = src.read_text(encoding="utf-8")
         m = re.match(r"<!--meta\s*(.*?)-->\s*", text, re.S)
@@ -154,10 +173,19 @@ def build():
             sys.exit(f"{src.name}: missing <!--meta ... --> block")
         meta = dict(l.split(":", 1) for l in m.group(1).strip().splitlines())
         body = text[m.end():]
-        name = src.name
-        nav = "\n".join('      <a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == name else "", t) for h, t in NAV)
-        page_tokens = {**tokens, "nav": nav}
-        title = meta["title"].strip()
+        if src.name == "episodes.html":
+            chunks = [eps[i:i + per_page] for i in range(0, len(eps), per_page)] or [[]]
+            for i, chunk in enumerate(chunks):
+                extra = {"episodes_list": "\n".join(episode_html(e, "h2") for e in chunk) or no_eps,
+                         "pager": pager_html(i + 1, len(chunks))}
+                jobs.append(("episodes.html" if i == 0 else f"episodes-{i + 1}.html", "episodes.html", meta, body, extra, i + 1))
+        else:
+            jobs.append((src.name, src.name, meta, body, {}, 1))
+    built = []
+    for name, nav_name, meta, body, extra, pageno in jobs:
+        nav = "\n".join('      <a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == nav_name else "", t) for h, t in NAV)
+        page_tokens = {**tokens, **extra, "nav": nav}
+        title = meta["title"].strip() + (f" (page {pageno})" if pageno > 1 else "")
         full_title = site["show_name"] if name == "index.html" else f"{title} | {site['show_name']}"
         url = f'{site["site_url"].rstrip("/")}/{"" if name == "index.html" else name}' if site["site_url"] else ""
         og_img = f'{site["site_url"].rstrip("/")}/assets/img/og-image.png' if site["site_url"] else "assets/img/og-image.png"
@@ -192,10 +220,11 @@ def build():
         if left:
             sys.exit(f"{name}: unknown tokens {left}")
         (ROOT / name).write_text(doc, encoding="utf-8")
+        built.append(name)
         print("built", name)
     if site["site_url"]:
         base = site["site_url"].rstrip("/")
-        urls = "".join(f"  <url><loc>{base}/{'' if h == 'index.html' else h}</loc></url>\n" for h, _ in NAV)
+        urls = "".join(f"  <url><loc>{base}/{'' if h == 'index.html' else h}</loc></url>\n" for h in [h for h, _ in NAV] + [n for n in built if n.startswith("episodes-")])
         (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n")
         (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n")
 
