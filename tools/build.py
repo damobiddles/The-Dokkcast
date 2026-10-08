@@ -66,7 +66,7 @@ def build():
     tokens = {
         "show_name": site["show_name"], "udokk_url": site["udokk_url"], "year": str(datetime.date.today().year),
         "email": site["email"],
-        "contact_line": f'        <p>{link("mailto:" + site["email"], site["email"])}</p>' if site["email"] else "",
+        "contact_line": f'        <p>Press and partnership enquiries:<br>{link("mailto:" + site["email"], site["email"])}</p>' if site["email"] else "",
         "listen_items": "\n".join(f"          <li>{link(u, k)}</li>" for k, u in listen.items())
                         or "          <li>Episodes coming soon.</li>",
         "listen_buttons": "\n".join(f'<a class="btn ghost" href="{esc(u, True)}" rel="noopener">{esc(k)}</a>' for k, u in listen.items()),
