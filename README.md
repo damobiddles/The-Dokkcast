@@ -98,6 +98,8 @@ Then run `python3 tools/build.py` and commit. Notes:
   appears automatically on the first build after that date (a Netlify build hook on a schedule makes this hands-free).
 - The blog gets its own index with pagination (`blog_per_page` in `data/site.json`, default 9), an RSS feed at
   `/blog/feed.xml`, structured data, sitemap entries and a "Latest articles" block on the home page.
+- **YouTube video:** put `[[youtube VIDEOID "A short description of the video"]]` on a line of its own. `VIDEOID` is the 11 characters after
+  `v=` in the video's web address. It uses YouTube's privacy-enhanced player and keeps its 16:9 shape on phones.
 - Every post ends with the medical disclaimer and the Listen links. Keep posts to general information: no personal medical advice.
 
 ### SEO and checks

@@ -41,7 +41,8 @@ def _slug(text):
 
 def md_to_html(text):
     lines, out, i = text.replace("\r\n", "\n").split("\n"), [], 0
-    block_start = re.compile(r"^(#{1,6}\s|>|```|\s*[-*+]\s+|\s*\d+[.)]\s+|(-{3,}|\*{3,})\s*$)")
+    block_start = re.compile(r"^(#{1,6}\s|>|```|\[\[youtube |\s*[-*+]\s+|\s*\d+[.)]\s+|(-{3,}|\*{3,})\s*$)")
+    video = re.compile(r'^\[\[youtube\s+([\w-]{11})(?:\s+"([^"]*)")?\]\]\s*$')
     while i < len(lines):
         line = lines[i]
         if not line.strip():
@@ -53,6 +54,11 @@ def md_to_html(text):
                 buf.append(lines[i]); i += 1
             i += 1
             out.append("<pre><code>" + html.escape("\n".join(buf), quote=False) + "</code></pre>")
+        elif video.match(line):
+            vid, title = video.match(line).groups()
+            out.append('<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + vid + '" title="' + esc(title or "Video", True)
+                       + '" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>')
+            i += 1
         elif re.match(r"^#{1,6}\s", line):
             m = re.match(r"^(#{1,6})\s+(.*?)\s*#*\s*$", line)
             level = min(max(len(m.group(1)), 2), 4)      # the post title is the h1, so body headings start at h2
