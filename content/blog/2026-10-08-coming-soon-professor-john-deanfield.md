@@ -4,6 +4,8 @@ date: 2026-10-08
 author: The Dokkcast
 description: We are excited to welcome Professor John Deanfield CBE, a leading cardiologist and former Olympic fencer, to The Dokkcast. Watch a first highlight.
 tags: Guests, Coming soon, Cardiology
+image: assets/img/john-deanfield-conversation.jpg
+image_alt: Two people in conversation on an orange sofa in The Dokkcast studio, with microphones in front of them
 ---
 
 We are excited to feature Professor John Deanfield on The Dokkcast, coming soon.
