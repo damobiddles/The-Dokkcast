@@ -101,7 +101,9 @@ def build():
 <title>{esc(full_title)}</title>
 <meta name="description" content="{esc(meta["desc"].strip(), True)}">
 <meta name="theme-color" content="#0a0f2c">
-{f'<link rel="canonical" href="{url}">' if url else ""}
+{'<base href="/">' if name == "404.html" else ""}
+{f'<link rel="canonical" href="{url}">' if url and name != "404.html" else ""}
+{'<meta name="robots" content="noindex">' if name == "404.html" else ""}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{esc(site["show_name"], True)}">
 <meta property="og:title" content="{esc(full_title, True)}">
