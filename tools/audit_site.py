@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parent.parent
-pages = sorted(p for p in ROOT.glob("*.html"))
+pages = sorted(list(ROOT.glob("*.html")) + list((ROOT / "blog").glob("*.html")))
 site = json.loads((ROOT / "data/site.json").read_text())
 base = site["site_url"].rstrip("/")
 issues, info = [], []
@@ -20,7 +20,7 @@ def add(page, msg, level="ISSUE"):
 
 for p in pages:
     soup = BeautifulSoup(p.read_text(encoding="utf-8"), "html.parser")
-    n = p.name
+    n = str(p.relative_to(ROOT))
     t = (soup.title.string or "").strip() if soup.title else ""
     d = (soup.find("meta", attrs={"name": "description"}) or {}).get("content", "")
     titles.setdefault(t, []).append(n); descs.setdefault(d, []).append(n)
@@ -49,7 +49,7 @@ for p in pages:
         if img.get("alt") is None: add(n, f"image without alt: {img.get('src')}")
         if not (img.get("width") and img.get("height")): add(n, f"image without width/height: {img.get('src')}")
         src = img.get("src", "")
-        if src and not src.startswith("http") and not (ROOT / src).exists(): add(n, f"broken image: {src}")
+        if src and not src.startswith("http") and not ((ROOT / src.lstrip("/")) if src.startswith("/") else (p.parent / src)).exists(): add(n, f"broken image: {src}")
     for a in soup.find_all("a", href=True):
         h = a["href"]
         if h.startswith(("mailto:", "tel:", "#")): continue
@@ -58,7 +58,8 @@ for p in pages:
             if u.netloc and urlparse(base).netloc not in u.netloc and a.get("rel") is None: add(n, f"external link without rel=noopener: {h[:60]}", "INFO")
             continue
         path = u.path.lstrip("/") if h.startswith("/") else u.path
-        if path and not (ROOT / path).exists(): add(n, f"broken internal link: {h}")
+        target = (ROOT / path) if h.startswith("/") else (p.parent / path)
+        if path and not target.exists(): add(n, f"broken internal link: {h}")
     if "To add" in p.read_text(): add(n, 'contains visible "To add" placeholder text')
     words = len(soup.get_text(" ", strip=True).split())
     if words < 120 and n != "404.html": add(n, f"thin content ({words} words)", "INFO")
@@ -67,7 +68,7 @@ for t, ps in titles.items():
     if len(ps) > 1: add(",".join(ps), f"duplicate title: {t}")
 for d, ps in descs.items():
     if len(ps) > 1 and d: add(",".join(ps), "duplicate description")
-for need in ("sitemap.xml", "robots.txt", "404.html"):
+for need in ("sitemap.xml", "robots.txt", "404.html", "blog/feed.xml"):
     if not (ROOT / need).exists(): add("site", f"missing {need}")
 for f in ("assets/img/og-image.png",):
     if not (ROOT / f).exists(): add("site", f"missing {f}")

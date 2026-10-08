@@ -70,6 +70,36 @@ the footer. It leads with the quality of the guests. To name some of them, add e
 `photo` and `url` are optional. Once there is at least one entry, a "Some of our guests" block appears on the media
 kit and the Guests page; until then nothing shows. Only list guests who have agreed to be named and pictured.
 
+### Blog
+
+Posts are Markdown files in `content/blog/`. Create one file per post, named after the web address you want, for example
+`content/blog/understanding-hrt.md` becomes `/blog/understanding-hrt.html`. Each file starts with a short header:
+
+```markdown
+---
+title: Understanding HRT
+date: 2026-11-02
+author: Dr Nara Daubeney
+description: One or two sentences, used on the blog list and in search results.
+tags: Women's health, Evidence
+image: assets/img/blog/understanding-hrt.jpg
+image_alt: Describe the picture
+---
+
+The article text, written in Markdown. Use `##` for headings, `-` for bullet lists, `**bold**`, `*italic*` and
+[links](https://example.com). Link to other pages on the site with, for example, [our episodes](episodes.html).
+```
+
+Then run `python3 tools/build.py` and commit. Notes:
+
+- `title` and `date` are required. `author` defaults to "The Dokkcast"; "Dr Nara Daubeney" links to her page.
+- `image` is optional (put pictures in `assets/img/blog/`, around 1200 x 630 pixels). Without one, the card shows the logo.
+- **Drafts and scheduling:** add `draft: true` to keep a post unpublished. A post dated in the future is held back and
+  appears automatically on the first build after that date (a Netlify build hook on a schedule makes this hands-free).
+- The blog gets its own index with pagination (`blog_per_page` in `data/site.json`, default 9), an RSS feed at
+  `/blog/feed.xml`, structured data, sitemap entries and a "Latest articles" block on the home page.
+- Every post ends with the medical disclaimer and the Listen links. Keep posts to general information: no personal medical advice.
+
 ### SEO and checks
 
 - Every page gets a canonical URL, Open Graph and Twitter tags, a favicon set and structured data (`PodcastSeries` on the

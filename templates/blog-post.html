@@ -1,0 +1,32 @@
+<article>
+  <section class="hero post-hero">
+    <div class="wrap narrow">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="blog/">Blog</a> / {{post_title}}</nav>
+      {{post_tags}}
+      <h1>{{post_title}}</h1>
+      <p class="byline">{{post_byline}}</p>
+    </div>
+  </section>
+
+  {{post_image}}
+
+  <section style="padding-top:0">
+    <div class="wrap narrow">
+      <div class="prose">
+{{post_body}}
+      </div>
+      <p class="note disclaimer">This article is for general information and education only. It does not replace individual medical advice, diagnosis or treatment. Always consult an appropriately qualified healthcare professional about concerns relating to your health.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap narrow">
+      <div class="panel">
+        <h2>Listen to The Dokkcast</h2>
+        <p>Evidence-led conversations with eminent doctors, clinicians, researchers and healthcare specialists, hosted by Dr Nara Daubeney.</p>
+        <div class="btn-row">{{listen_buttons}}<a class="btn ghost" href="episodes.html">All episodes</a></div>
+      </div>
+      {{post_nav}}
+    </div>
+  </section>
+</article>

@@ -10,8 +10,10 @@ import datetime, email.utils, glob, html, json, re, sys, urllib.parse, urllib.re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+import blog
+
 ROOT = Path(__file__).resolve().parent.parent
-NAV = [("index.html", "Home"), ("episodes.html", "Episodes"), ("about.html", "About"),
+NAV = [("index.html", "Home"), ("episodes.html", "Episodes"), ("blog/", "Blog"), ("about.html", "About"),
        ("dr-nara-daubeney.html", "Dr Nara Daubeney"), ("partners.html", "Sponsors &amp; Partners"),
        ("guests.html", "Guests")]
 EXTRA_PAGES = [("media-kit.html", "Media kit")]  # linked from the footer and sitemap, not the header
@@ -165,7 +167,7 @@ def plain(s):
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", s))).strip()
 
 
-def jsonld(site, name, title, meta, body, chunk):
+def jsonld(site, name, title, meta, body, chunk, extra_nodes=(), crumbs=None):
     """Structured data for a page, as a <script type="application/ld+json"> block ('' if no site_url yet)."""
     if not site.get("site_url"):
         return ""
@@ -203,11 +205,13 @@ def jsonld(site, name, title, meta, body, chunk):
             if e.get("summary"):
                 ep["description"] = e["summary"]
             nodes.append(ep)
+    nodes.extend(extra_nodes)
     if name not in ("index.html", "404.html"):
-        crumbs = [("Home", f"{base}/")]
-        if name == "media-kit.html":
-            crumbs.append(("Sponsors & Partners", f"{base}/partners.html"))
-        crumbs.append((meta["title"].strip(), f"{base}/{name}"))
+        if crumbs is None:
+            crumbs = [("Home", f"{base}/")]
+            if name == "media-kit.html":
+                crumbs.append(("Sponsors & Partners", f"{base}/partners.html"))
+            crumbs.append((meta["title"].strip(), f"{base}/{name}"))
         nodes.append({"@type": "BreadcrumbList", "itemListElement": [
             {"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(crumbs)]})
     if not nodes:
@@ -216,17 +220,35 @@ def jsonld(site, name, title, meta, body, chunk):
     return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
 
 
+def rebase(doc, depth):
+    """Pages in a sub-folder (blog/) point at site files with ../ so assets and links resolve from there."""
+    if not depth:
+        return doc
+    pre = "../" * depth
+    local = lambda u: bool(u) and not re.match(r"(?i)^(https?:|//|/|#|mailto:|tel:|data:)", u)
+    fix = lambda u: pre if u in ("./", ".") else (pre + u if local(u) else u)
+
+    def sub(m):
+        attr, q, val = m.group(1), m.group(2), m.group(3)
+        if attr == "srcset":
+            val = ", ".join(" ".join([fix(p.split()[0])] + p.split()[1:]) for p in val.split(",") if p.strip())
+        else:
+            val = fix(val)
+        return f"{attr}={q}{val}{q}"
+    return re.sub(r'\b(href|src|srcset)=(["\'])(.*?)\2', sub, doc)
+
+
 def mail_btn(email, label, subject):
     if not email:
         return '<span class="note">Contact email to be added.</span>'
     return f'<a class="btn" href="mailto:{esc(email, True)}?subject={urllib.parse.quote(subject)}">{esc(label)}</a>'
 
 
-def pager_html(cur, total):
-    """Newer / page numbers / Older links for the episode pages."""
+def pager_html(cur, total, href=None, label="Episode pages"):
+    """Newer / page numbers / Older links for paginated lists (episodes by default)."""
     if total <= 1:
         return ""
-    href = lambda n: "episodes.html" if n == 1 else f"episodes-{n}.html"
+    href = href or (lambda n: "episodes.html" if n == 1 else f"episodes-{n}.html")
     items, prev = [], 0
     for n in [n for n in range(1, total + 1) if n in (1, total) or abs(n - cur) <= 1]:
         if n - prev > 1:
@@ -235,13 +257,15 @@ def pager_html(cur, total):
         prev = n
     newer = f'<a class="step" href="{href(cur - 1)}" rel="prev">&larr; Newer</a>' if cur > 1 else ""
     older = f'<a class="step" href="{href(cur + 1)}" rel="next">Older &rarr;</a>' if cur < total else ""
-    return f'<nav class="pager" aria-label="Episode pages">{newer}{"".join(items)}{older}</nav>'
+    return f'<nav class="pager" aria-label="{label}">{newer}{"".join(items)}{older}</nav>'
 
 
 def build():
     site = load("site.json")
     eps = (fetch_episodes(site["rss_url"]) if site.get("rss_url") else None) or load("episodes.json")
     eps = sorted(eps, key=lambda e: e.get("date", ""), reverse=True)
+    posts = blog.load_posts()
+    base_url = site["site_url"].rstrip("/")
     listen = {k: v for k, v in site["listen"].items() if v}
     social = {k: v for k, v in site["social"].items() if v}
     header = (ROOT / "partials/header.html").read_text(encoding="utf-8")
@@ -265,6 +289,9 @@ def build():
         "social_items": "\n".join(f"<li>{link(u, k)}</li>" for k, u in social.items()),
         "footer_nav": "\n".join(f'          <li><a href="{href_of(h)}">{t}</a></li>' for h, t in NAV + EXTRA_PAGES),
         "guest_showcase": guest_showcase_html(),
+        "latest_posts": ('<section style="padding-top:0"><div class="wrap"><span class="eyebrow">From the blog</span>'
+                         '<h2>Latest articles</h2><div class="post-grid">' + "".join(blog.card_html(p, "h3") for p in posts[:3]) +
+                         '</div><div class="btn-row"><a class="btn ghost" href="blog/">All articles</a></div></div></section>') if posts else "",
         "latest_episode": episode_html(eps[0], "h3") if eps else placeholder(
             "<strong>Our first episode is on its way.</strong> Check back soon."),
         "email_cta": mail_btn(site["email"], "Email us", "Dokkcast Enquiry"),
@@ -291,6 +318,48 @@ def build():
                 jobs.append(("episodes.html" if i == 0 else f"episodes-{i + 1}.html", "episodes.html", meta, body, extra, i + 1))
         else:
             jobs.append((src.name, NAV_PARENT.get(src.name, src.name), meta, body, {}, 1))
+    # ---- blog: paginated index, one page per post, RSS feed
+    for old in list((ROOT / "blog").glob("*.html")) + list((ROOT / "blog").glob("feed.xml")):
+        old.unlink()
+    (ROOT / "blog").mkdir(exist_ok=True)
+    blog_per_page = max(1, int(site.get("blog_per_page", 9)))
+    tpl_index = (ROOT / "templates/blog-index.html").read_text(encoding="utf-8")
+    tpl_post = (ROOT / "templates/blog-post.html").read_text(encoding="utf-8")
+    blog_href = lambda n: "blog/" if n == 1 else f"blog/page-{n}.html"
+    chunks = [posts[i:i + blog_per_page] for i in range(0, len(posts), blog_per_page)] or [[]]
+    blog_meta = {"title": "Blog", "desc": "Articles and show notes from The Dokkcast, the evidence-led health podcast hosted by Dr Nara Daubeney."}
+    for i, chunk_posts in enumerate(chunks):
+        listing = ('<div class="post-grid">' + "\n".join(blog.card_html(p) for p in chunk_posts) + "</div>") if chunk_posts else placeholder(
+            "<strong>Our first articles are coming soon.</strong>")
+        name = "blog/index.html" if i == 0 else f"blog/page-{i + 1}.html"
+        jobs.append((name, "blog/", dict(blog_meta, **({"fulltitle": "The Dokkcast Blog | Health articles and show notes"} if i == 0 else {})), tpl_index, {
+            "blog_list": listing, "blog_pager": pager_html(i + 1, len(chunks), blog_href, "Blog pages"), "_depth": 1,
+            "_url": f"{base_url}/{blog_href(i + 1)}" if base_url else "",
+            "_crumbs": [("Home", f"{base_url}/"), ("Blog", f"{base_url}/blog/")],
+            "_nodes": [{"@type": "Blog", "name": f"{site['show_name']} blog", "url": f"{base_url}/blog/",
+                        "publisher": {"@type": "Organization", "name": "Udokk Ltd", "url": site["udokk_url"]}}] if i == 0 and base_url else []}, i + 1))
+    for i, p in enumerate(posts):
+        author_html = (f'<a href="dr-nara-daubeney.html">{esc(p["author"])}</a>' if p["author"] == "Dr Nara Daubeney" else esc(p["author"]))
+        img_abs = (p["image"] if p["image"].startswith("http") else f"{base_url}/{p['image']}") if p["image"] and base_url else ""
+        author_node = ({"@type": "Person", "name": p["author"], "url": f"{base_url}/dr-nara-daubeney.html"} if p["author"] == "Dr Nara Daubeney"
+                       else {"@type": "Organization", "name": p["author"], "url": f"{base_url}/"})
+        node = {"@type": "BlogPosting", "headline": p["title"], "description": p["description"], "datePublished": p["date"].isoformat(),
+                "dateModified": p["date"].isoformat(), "author": author_node,
+                "publisher": {"@type": "Organization", "name": "Udokk Ltd", "url": site["udokk_url"]},
+                "image": img_abs or f"{base_url}/assets/img/og-image.png", "mainEntityOfPage": f"{base_url}/{p['url']}"} if base_url else None
+        head_extra = (f'<meta property="article:published_time" content="{p["date"].isoformat()}">'
+                      f'<meta property="article:author" content="{esc(p["author"], True)}">'
+                      + "".join(f'<meta property="article:tag" content="{esc(tg, True)}">' for tg in p["tags"]))
+        jobs.append((p["url"], "blog/", {"title": p["title"], "desc": p["description"]}, tpl_post, {
+            "post_title": esc(p["title"]), "post_tags": blog.tags_html(p),
+            "post_byline": f'By {author_html} &middot; {blog.meta_line(p)}',
+            "post_image": (f'<figure class="post-image"><img src="{esc(p["image"], True)}" alt="{esc(p["image_alt"], True)}" width="1200" height="630"></figure>' if p["image"] else ""),
+            "post_body": p["body_html"], "post_nav": blog.post_nav_html(posts, i), "_depth": 1, "_og_type": "article",
+            "_url": f"{base_url}/{p['url']}" if base_url else "", "_og_image": img_abs, "_head_extra": head_extra,
+            "_crumbs": [("Home", f"{base_url}/"), ("Blog", f"{base_url}/blog/"), (p["title"], f"{base_url}/{p['url']}")],
+            "_nodes": [node] if node else []}, 1))
+    if posts and base_url:
+        (ROOT / "blog/feed.xml").write_text(blog.feed_xml(site, posts), encoding="utf-8")
     built = []
     for name, nav_name, meta, body, extra, pageno in jobs:
         nav = "\n".join('      <a href="%s"%s>%s</a>' % (href_of(h), ' aria-current="page"' if h == nav_name else "", t) for h, t in NAV)
@@ -298,8 +367,9 @@ def build():
         page_tokens = {**tokens, **{k: v for k, v in extra.items() if not k.startswith("_")}, "nav": nav}
         title = meta["title"].strip() + (f" (page {pageno})" if pageno > 1 else "")
         full_title = meta["fulltitle"].strip() if meta.get("fulltitle") else (site["show_name"] if name == "index.html" else f"{title} | {site['show_name']}")
-        url = f'{site["site_url"].rstrip("/")}/{"" if name == "index.html" else name}' if site["site_url"] else ""
-        og_img = f'{site["site_url"].rstrip("/")}/assets/img/og-image.png' if site["site_url"] else "assets/img/og-image.png"
+        url = extra["_url"] if "_url" in extra else (f'{base_url}/{"" if name == "index.html" else name}' if base_url else "")
+        og_img = extra.get("_og_image") or (f"{base_url}/assets/img/og-image.png" if base_url else "assets/img/og-image.png")
+        depth = extra.get("_depth", 0)
         head = f'''<!doctype html>
 <html lang="en-GB">
 <head>
@@ -311,7 +381,7 @@ def build():
 {'<base href="/">' if name == "404.html" else ""}
 {f'<link rel="canonical" href="{url}">' if url and name != "404.html" else ""}
 {'<meta name="robots" content="noindex">' if name == "404.html" else ""}
-<meta property="og:type" content="website">
+<meta property="og:type" content="{extra.get("_og_type", "website")}">
 <meta property="og:locale" content="en_GB">
 <meta property="og:site_name" content="{esc(site["show_name"], True)}">
 <meta property="og:title" content="{esc(full_title, True)}">
@@ -324,10 +394,12 @@ def build():
 <meta name="twitter:description" content="{esc(meta["desc"].strip(), True)}">
 <meta name="twitter:image" content="{og_img}">
 {f'<link rel="alternate" type="application/rss+xml" title="{esc(site["show_name"], True)} podcast feed" href="{esc(site["rss_url"], True)}">' if site.get("rss_url") and name != "404.html" else ""}
+{f'<link rel="alternate" type="application/rss+xml" title="{esc(site["show_name"], True)} blog" href="blog/feed.xml">' if posts and base_url and name != "404.html" else ""}
+{extra.get("_head_extra", "")}
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" href="assets/img/udokk-logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-{jsonld(site, name, title, meta, body, chunk)}
+{jsonld(site, name, title, meta, body, chunk, extra.get('_nodes', ()), extra.get('_crumbs'))}
 <link rel="preload" href="assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -337,16 +409,20 @@ def build():
               '\n<script src="assets/site.js" defer></script>\n</body>\n</html>\n'
         for k, v in page_tokens.items():
             doc = doc.replace("{{" + k + "}}", v)
-        doc = responsive_images(doc)
+        doc = rebase(responsive_images(doc), depth)
         left = re.findall(r"\{\{(\w+)\}\}", doc)
         if left:
             sys.exit(f"{name}: unknown tokens {left}")
+        (ROOT / name).parent.mkdir(parents=True, exist_ok=True)
         (ROOT / name).write_text(doc, encoding="utf-8")
         built.append(name)
         print("built", name)
     if site["site_url"]:
         base = site["site_url"].rstrip("/")
-        urls = "".join(f"  <url><loc>{base}/{'' if h == 'index.html' else h}</loc></url>\n" for h in [h for h, _ in NAV + EXTRA_PAGES] + [n for n in built if n.startswith("episodes-")])
+        locs = [("" if h == "index.html" else h, None) for h, _ in NAV + EXTRA_PAGES]
+        locs += [(n, None) for n in built if n.startswith(("episodes-", "blog/page-"))]
+        locs += [(p["url"], p["date"].isoformat()) for p in posts]
+        urls = "".join(f"  <url><loc>{base}/{loc}</loc>" + (f"<lastmod>{mod}</lastmod>" if mod else "") + "</url>\n" for loc, mod in locs)
         (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n")
         (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {base}/sitemap.xml\n")
 
