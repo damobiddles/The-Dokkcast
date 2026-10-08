@@ -56,19 +56,26 @@ In Acast, open the episode, choose **Share / Embed**, and copy the player link (
 `guest`, `summary`, `image` and `image_alt` are optional. Newest episodes appear first, and the
 latest one also appears on the home page. The build refuses embed links that aren't from Acast.
 
-### Media kit
+### Media kit and guests
 
-The media kit lives at `media-kit.html` (source: `pages/media-kit.html`) and is linked from the Partners page
-and the footer. Audience figures come from `data/mediakit.json`. Put a value on any line (for example
-`"value": "1,200"` for "Downloads per episode") and it appears under "Audience in numbers". Lines left blank are
-hidden, and the whole block stays out of the page until at least one has a value. Set `as_of` to show a date.
+The media kit lives at `media-kit.html` (source: `pages/media-kit.html`) and is linked from the Partners page and
+the footer. It leads with the quality of the guests. To name some of them, add entries to `data/guests.json`:
+
+```json
+[
+  {"name": "Guest name", "title": "Role, organisation", "photo": "assets/img/guests/name.jpg", "url": "https://..."}
+]
+```
+
+`photo` and `url` are optional. Once there is at least one entry, a "Some of our guests" block appears on the media
+kit and the Guests page; until then nothing shows. Only list guests who have agreed to be named and pictured.
 
 ### Still to fill in
 
 Search the `pages/` folder for `class="placeholder"`. These need real content:
 - `about.html`: description of the podcast and of udokk
 - `dr-nara-daubeney.html`: biography and photo
-- `data/mediakit.json`: audience figures for the media kit (optional)
+- `data/guests.json`: named guests, with titles and photos, for the media kit and Guests page (optional)
 - `guests.html`: practical details for guests
 - `data/site.json`: contact email, Acast / Apple / Spotify / YouTube links, socials, and `site_url`
   once the domain is known (this also generates `sitemap.xml` and `robots.txt`)

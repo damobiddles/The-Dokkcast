@@ -123,21 +123,22 @@ def _date(s):
     return f"{d.day} {d.strftime('%B %Y')}"
 
 
-def media_stats_html():
-    """Audience figures from data/mediakit.json. Shown only once real values are filled in."""
-    kit = load("mediakit.json")
-    stats = [s for s in kit.get("stats", []) if str(s.get("value", "")).strip()]
-    if not stats:
+def guest_showcase_html(heading="Some of our guests"):
+    """Cards for the guests listed in data/guests.json. Renders nothing until the list has entries."""
+    guests = load("guests.json")
+    if not guests:
         return ""
-    cards = "\n".join(f'<div class="stat"><strong>{esc(str(s["value"]))}</strong><span>{esc(s["label"])}</span></div>' for s in stats)
-    as_of = f'<p class="note">Figures as of {esc(kit["as_of"])}.</p>' if kit.get("as_of") else ""
+    cards = []
+    for g in guests:
+        img = (f'<img src="{esc(g["photo"], True)}" alt="" width="72" height="72" loading="lazy">' if g.get("photo") else "")
+        name = link(g["url"], g["name"]) if g.get("url") else esc(g["name"])
+        cards.append(f'<div class="guest">{img}<div><strong>{name}</strong><span>{esc(g.get("title", ""))}</span></div></div>')
     return f'''<section style="padding-top:0">
   <div class="wrap">
-    <h2>Audience in numbers</h2>
-    <div class="stats">
-{cards}
+    <h2>{esc(heading)}</h2>
+    <div class="guest-grid">
+{chr(10).join(cards)}
     </div>
-    {as_of}
   </div>
 </section>'''
 
@@ -187,7 +188,7 @@ def build():
         "listen_buttons": "\n".join(f'<a class="btn ghost" href="{esc(u, True)}" rel="noopener">{esc(k)}</a>' for k, u in listen.items()),
         "social_items": "\n".join(f"<li>{link(u, k)}</li>" for k, u in social.items()),
         "footer_nav": "\n".join(f'          <li><a href="{h}">{t}</a></li>' for h, t in NAV + EXTRA_PAGES),
-        "media_stats": media_stats_html(),
+        "guest_showcase": guest_showcase_html(),
         "latest_episode": episode_html(eps[0], "h3") if eps else placeholder(
             "<strong>Our first episode is on its way.</strong> Check back soon."),
         "email_cta": mail_btn(site["email"], "Email us", "Dokkcast Enquiry"),
