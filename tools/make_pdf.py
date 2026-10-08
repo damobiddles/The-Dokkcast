@@ -77,7 +77,7 @@ footer p{{margin-bottom:1mm}}
 .legal{{grid-column:1/-1;color:#9aa5c7;font-size:6.3pt;line-height:1.4;margin:0!important}}
 </style></head><body><div class="page">
 <header>
-  <img src="{uri('assets/img/udokk-logo.png')}" alt="">
+  <img src="{uri('assets/img/udokk-logo-clean.svg')}" alt="">
   <div><div class="kicker">MEDIA KIT</div><h1>The <b>Dokkcast</b></h1>
   <p class="tag">An evidence-led health podcast hosted by Dr Nara Daubeney</p></div>
 </header>

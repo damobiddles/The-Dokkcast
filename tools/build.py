@@ -396,7 +396,7 @@ def build():
 {f'<link rel="alternate" type="application/rss+xml" title="{esc(site["show_name"], True)} podcast feed" href="{esc(site["rss_url"], True)}">' if site.get("rss_url") and name != "404.html" else ""}
 {f'<link rel="alternate" type="application/rss+xml" title="{esc(site["show_name"], True)} blog" href="blog/feed.xml">' if posts and base_url and name != "404.html" else ""}
 {extra.get("_head_extra", "")}
-<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="icon" href="assets/img/udokk-logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 {jsonld(site, name, title, meta, body, chunk, extra.get('_nodes', ()), extra.get('_crumbs'))}
