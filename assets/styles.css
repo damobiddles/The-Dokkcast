@@ -85,6 +85,8 @@ details[open] summary{color:var(--ice)} details p{color:var(--muted)}
 .player iframe{display:block;width:100%;border:0;border-radius:12px;min-height:190px;background:#fff}
 .guest-line{color:var(--ice);font-weight:600}
 
+.creds{color:var(--ice);font-weight:700;font-size:.95rem;letter-spacing:.01em;margin:-.2rem 0 1rem}
+
 /* photos */
 .photo-wide{margin:0}
 .photo{margin:0}
