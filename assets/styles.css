@@ -133,7 +133,7 @@ main details[open] summary{color:var(--ice)} main details p{color:var(--muted)}
 .photo img,.photo-wide img{display:block;width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--line);box-shadow:0 18px 50px rgba(10,15,44,.45)}
 .photo-wide img{aspect-ratio:16/9;object-fit:cover;object-position:50% 30%}
 .photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.photo-grid img{aspect-ratio:4/3;object-fit:cover;object-position:50% 25%}
+.photo-grid img{aspect-ratio:16/9;object-fit:cover;object-position:50% 40%}
 @media(max-width:700px){.photo-grid{grid-template-columns:1fr}}
 
 .crumbs{font-size:.9rem;color:var(--muted);margin-bottom:1rem}.crumbs a{color:var(--ice)}
