@@ -19,7 +19,7 @@ SRC, DST = ROOT / "assets/img/source", ROOT / "assets/img"
 # the portrait is already colourful, so it gets a much lighter touch.
 PHOTOS = {
     "studio-wide": {}, "studio-behind-the-scenes": {}, "conversation-pair": {}, "group-of-four": {},
-    "guests-pair-portrait": {}, "john-deanfield-conversation": {}, "home-studio": {},
+    "guests-pair-portrait": {}, "john-deanfield-conversation": {}, "home-studio": {}, "about-studio": {},
     "nara": {"cutoff": 0.05, "contrast": 0.18, "saturation": 0.97, "sharpen": 35},
 }
 
