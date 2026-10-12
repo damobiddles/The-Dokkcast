@@ -15,7 +15,7 @@ You can listen on [our episodes page](episodes.html), or on Spotify, Apple Podca
 
 Here is a short highlight from the conversation:
 
-[[youtube kJdyWuDFDMM "Highlight from The Dokkcast with Professor John Deanfield"]]
+[[video assets/video/john-deanfield-highlight.mp4 poster=assets/video/john-deanfield-highlight.jpg ratio=9:16 "Highlight from The Dokkcast with Professor John Deanfield"]]
 
 ## Who is Professor John Deanfield?
 

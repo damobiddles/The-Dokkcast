@@ -41,8 +41,9 @@ def _slug(text):
 
 def md_to_html(text):
     lines, out, i = text.replace("\r\n", "\n").split("\n"), [], 0
-    block_start = re.compile(r"^(#{1,6}\s|>|```|\[\[youtube |\s*[-*+]\s+|\s*\d+[.)]\s+|(-{3,}|\*{3,})\s*$)")
+    block_start = re.compile(r"^(#{1,6}\s|>|```|\[\[(?:youtube|video) |\s*[-*+]\s+|\s*\d+[.)]\s+|(-{3,}|\*{3,})\s*$)")
     video = re.compile(r'^\[\[youtube\s+([\w-]{11})(?:\s+"([^"]*)")?\]\]\s*$')
+    local_video = re.compile(r'^\[\[video\s+([\w./-]+\.mp4)(?:\s+poster=([\w./-]+\.(?:jpg|jpeg|png|webp)))?(?:\s+ratio=(\d+):(\d+))?(?:\s+"([^"]*)")?\]\]\s*$')
     while i < len(lines):
         line = lines[i]
         if not line.strip():
@@ -54,6 +55,14 @@ def md_to_html(text):
                 buf.append(lines[i]); i += 1
             i += 1
             out.append("<pre><code>" + html.escape("\n".join(buf), quote=False) + "</code></pre>")
+        elif local_video.match(line) and ".." not in line:
+            src, poster, rw, rh, title = local_video.match(line).groups()
+            rw, rh = rw or "9", rh or "16"                       # default: a vertical (9:16) clip
+            shape = "video-wide" if int(rw) >= int(rh) else "video-tall"
+            out.append(f'<figure class="video-file {shape}"><video controls preload="metadata" playsinline'
+                       + (f' poster="{esc(poster, True)}"' if poster else "") + f' aria-label="{esc(title or "Video", True)}" style="aspect-ratio:{rw}/{rh}">'
+                       f'<source src="{esc(src, True)}" type="video/mp4"><p>Your browser cannot play this video. <a href="{esc(src, True)}">Download it</a>.</p></video></figure>')
+            i += 1
         elif video.match(line):
             vid, title = video.match(line).groups()
             out.append('<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/' + vid + '" title="' + esc(title or "Video", True)

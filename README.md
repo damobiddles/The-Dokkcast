@@ -111,6 +111,9 @@ Then run `python3 tools/build.py` and commit. Notes:
   `/blog/feed.xml`, structured data, sitemap entries and a "Latest articles" block on the home page.
 - **YouTube video:** put `[[youtube VIDEOID "A short description of the video"]]` on a line of its own. `VIDEOID` is the 11 characters after
   `v=` in the video's web address. It uses YouTube's privacy-enhanced player and keeps its 16:9 shape on phones.
+- **A video file:** put `[[video assets/video/NAME.mp4 poster=assets/video/NAME.jpg ratio=9:16 "Describe the video"]]` on a line of its own.
+  `ratio` is `9:16` (vertical, the default) or `16:9`. Keep clips short and under about 15 MB, and run them through
+  `ffmpeg -i in.mp4 -c copy -movflags +faststart out.mp4` first so they start playing straight away. Longer videos are better on YouTube.
 - Every post ends with the medical disclaimer and the Listen links. Keep posts to general information: no personal medical advice.
 
 ### SEO and checks

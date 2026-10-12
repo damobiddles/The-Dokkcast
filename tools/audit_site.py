@@ -50,6 +50,11 @@ for p in pages:
         if not (img.get("width") and img.get("height")): add(n, f"image without width/height: {img.get('src')}")
         src = img.get("src", "")
         if src and not src.startswith("http") and not ((ROOT / src.lstrip("/")) if src.startswith("/") else (p.parent / src)).exists(): add(n, f"broken image: {src}")
+    for v in soup.find_all(["video", "source"]):
+        for attr in ("src", "poster"):
+            ref = v.get(attr)
+            if ref and not ref.startswith("http") and not ((ROOT / ref.lstrip("/")) if ref.startswith("/") else (p.parent / ref)).exists():
+                add(n, f"broken {v.name} {attr}: {ref}")
     for a in soup.find_all("a", href=True):
         h = a["href"]
         if h.startswith(("mailto:", "tel:", "#")): continue

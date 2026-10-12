@@ -235,7 +235,7 @@ def rebase(doc, depth):
         else:
             val = fix(val)
         return f"{attr}={q}{val}{q}"
-    return re.sub(r'\b(href|src|srcset)=(["\'])(.*?)\2', sub, doc)
+    return re.sub(r'\b(href|src|srcset|poster)=(["\'])(.*?)\2', sub, doc)
 
 
 def mail_btn(email, label, subject):
