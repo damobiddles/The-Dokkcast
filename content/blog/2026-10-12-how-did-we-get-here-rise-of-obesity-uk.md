@@ -1,16 +1,19 @@
 ---
-title: "Coming soon: Professor John Deanfield"
-date: 2026-10-08
+title: "How Did We Get Here? The Rise of Obesity in the UK"
+seo_title: How Did We Get Here? Obesity in the UK | The Dokkcast
+date: 2026-10-12
 author: The Dokkcast
-description: We are excited to welcome Professor John Deanfield CBE, a leading cardiologist and former Olympic fencer, to The Dokkcast. Watch a first highlight.
-tags: Guests, Coming soon, Cardiology
+description: Professor John Deanfield CBE joins The Dokkcast to ask how we got here. Listen to our new episode on the rise of obesity in the UK.
+tags: New episode, Guests, Cardiology, Obesity
 image: assets/img/john-deanfield-conversation.jpg
 image_alt: Two people in conversation on an orange sofa in The Dokkcast studio, with microphones in front of them
 ---
 
-We are excited to feature Professor John Deanfield on The Dokkcast, coming soon.
+Our new episode is out: **How Did We Get Here? The Rise of Obesity in the UK**, with Professor John Deanfield CBE.
 
-Here is a short highlight from our conversation:
+You can listen on [our episodes page](episodes.html), or on Spotify, Apple Podcasts and YouTube.
+
+Here is a short highlight from the conversation:
 
 [[youtube kJdyWuDFDMM "Highlight from The Dokkcast with Professor John Deanfield"]]
 
@@ -28,9 +31,9 @@ He was elected a Fellow of the Academy of Medical Sciences in 2001, and was appo
 
 Medicine was not his only early calling. At Cambridge, John Deanfield captained the university fencing team. He went on to represent Great Britain in sabre, in both the individual and team events, at the 1972 Munich and 1976 Montreal Olympic Games, and he won the British sabre title in 1975. He later boycotted the 1980 Moscow Games.
 
-## Don't miss the episode
+## Listen now
 
-We will share the full conversation with Professor Deanfield very soon. To make sure you don't miss it, follow The Dokkcast on Spotify, Apple Podcasts or YouTube, or browse [all of our episodes](episodes.html).
+The full conversation is on [our episodes page](episodes.html) and wherever you get your podcasts. Follow The Dokkcast on Spotify, Apple Podcasts or YouTube so you don't miss the next one.
 
 ## Sources
 

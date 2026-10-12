@@ -131,7 +131,7 @@ def load_posts(today=None):
             "slug": slug, "url": f"blog/{slug}.html", "title": title, "date": date,
             "date_str": f"{date.day} {date.strftime('%B %Y')}", "author": meta.get("author", "The Dokkcast"),
             "description": excerpt, "tags": [t.strip() for t in meta.get("tags", "").split(",") if t.strip()],
-            "image": meta.get("image", ""), "image_alt": meta.get("image_alt", ""),
+            "image": meta.get("image", ""), "image_alt": meta.get("image_alt", ""), "seo_title": meta.get("seo_title", ""),
             "body_html": body_html, "minutes": max(1, math.ceil(words / 200)),
         })
     return sorted(posts, key=lambda p: (p["date"], p["slug"]), reverse=True)

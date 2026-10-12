@@ -65,6 +65,12 @@
   to = "/dr-nara-daubeney.html"
   status = 301
 
+# The John Deanfield announcement moved when the episode came out.
+[[redirects]]
+  from = "/blog/coming-soon-professor-john-deanfield.html"
+  to = "/blog/how-did-we-get-here-rise-of-obesity-uk.html"
+  status = 301
+
 # Keep source folders out of the public site.
 [[redirects]]
   from = "/pages/*"

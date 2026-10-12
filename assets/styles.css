@@ -154,7 +154,7 @@ main details[open] summary{color:var(--ice)} main details p{color:var(--muted)}
 .wrap.narrow{max-width:760px}
 .post-hero{padding-bottom:24px}.post-hero .tags{margin:0 0 14px}.post-hero h1{font-size:clamp(2rem,5vw,3.1rem)}
 .byline{color:var(--muted);font-weight:600;margin:0}
-.post-image{margin:0 auto;padding:0 20px;max-width:980px}
+.post-image{margin:0 auto 2.2rem;padding:0 20px;max-width:980px}
 .post-image img{display:block;width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--line)}
 .prose{font-size:1.12rem;line-height:1.75}
 .prose h2{margin-top:2.2rem}.prose h3{margin-top:1.8rem;font-size:1.3rem}

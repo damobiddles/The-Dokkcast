@@ -350,7 +350,7 @@ def build():
         head_extra = (f'<meta property="article:published_time" content="{p["date"].isoformat()}">'
                       f'<meta property="article:author" content="{esc(p["author"], True)}">'
                       + "".join(f'<meta property="article:tag" content="{esc(tg, True)}">' for tg in p["tags"]))
-        jobs.append((p["url"], "blog/", {"title": p["title"], "desc": p["description"]}, tpl_post, {
+        jobs.append((p["url"], "blog/", {"title": p["title"], "desc": p["description"], **({"fulltitle": p["seo_title"]} if p["seo_title"] else {})}, tpl_post, {
             "post_title": esc(p["title"]), "post_tags": blog.tags_html(p),
             "post_byline": f'By {author_html} &middot; {blog.meta_line(p)}',
             "post_image": (f'<figure class="post-image"><img src="{esc(p["image"], True)}" alt="{esc(p["image_alt"], True)}" width="1200" height="630"></figure>' if p["image"] else ""),
