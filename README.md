@@ -33,6 +33,17 @@ the site without a feed.
 The Episodes page shows 10 episodes per page (`episodes_per_page` in `data/site.json`), with
 Newer / Older links and page numbers. Extra pages (`episodes-2.html`, ...) are generated automatically.
 
+### Automatic updates
+
+The site only reads the Acast feed when it is rebuilt. `.github/workflows/rebuild-site.yml` asks Netlify to rebuild every
+4 hours (and you can run it by hand from the repo's **Actions** tab), so a new episode normally appears within a few hours.
+
+One-off setup: in Netlify, create a build hook (Site configuration > Build & deploy > Build hooks) and save its URL in this
+repo as an Actions secret called `NETLIFY_BUILD_HOOK`. Treat that URL like a password. Until the secret exists the job does nothing.
+GitHub switches off scheduled jobs on a repo that has had no activity for 60 days; pushing any change, or re-enabling the
+workflow in the Actions tab, turns it back on. For instant updates you can also call the same hook from Zapier, Make or IFTTT
+when the feed gets a new item.
+
 ### Adding an episode by hand (Acast)
 
 In Acast, open the episode, choose **Share / Embed**, and copy the player link (it starts with
