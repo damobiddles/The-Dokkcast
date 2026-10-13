@@ -29,7 +29,6 @@ def build_html():
     guests = json.loads((ROOT / "data/guests.json").read_text(encoding="utf-8"))
     base = site["site_url"].rstrip("/")
     listen = " &middot; ".join(link(u, k) for k, u in site["listen"].items() if u)
-    producer = site.get("producer", {})
     featured = ""
     if guests:
         names = "; ".join(f'<b>{esc(g["name"])}</b>' + (f", {esc(g['title'])}" if g.get("title") else "") for g in guests[:6])
@@ -145,7 +144,6 @@ footer p{{margin-bottom:1mm}}
   <div>
     <p><b>Press &amp; partnership enquiries</b></p>
     <p>{link("mailto:" + site["email"], site["email"])}</p>
-    <p class="muted">Production and marketing: {link(producer.get("url", ""), producer.get("name", ""))}</p>
   </div>
   <p class="legal">The Dokkcast provides general information and education only and does not replace individual medical advice, diagnosis or treatment. &copy; Udokk Ltd. Company number 16772147.</p>
 </footer>

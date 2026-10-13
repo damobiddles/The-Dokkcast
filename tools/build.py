@@ -280,9 +280,6 @@ def build():
                         + "".join(f'<a href="{esc(u, True)}" rel="noopener">{esc(k)}</a>' for k, u in listen.items())
                         + "</div></details>") if listen else "",
         "listen_inline": ", ".join(link(u, k) for k, u in listen.items()),
-        "producer_link": link(site["producer"]["url"], site["producer"]["name"]) if site.get("producer", {}).get("url") else "",
-        "producer_line": (f'        <p>Podcast production and marketing by {link(site["producer"]["url"], site["producer"]["name"])}.</p>'
-                          if site.get("producer", {}).get("url") else ""),
         "listen_items": "\n".join(f"          <li>{link(u, k)}</li>" for k, u in listen.items())
                         or "          <li>Episodes coming soon.</li>",
         "listen_buttons": "\n".join(f'<a class="btn ghost" href="{esc(u, True)}" rel="noopener">{esc(k)}</a>' for k, u in listen.items()),
