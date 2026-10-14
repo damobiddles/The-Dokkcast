@@ -41,8 +41,9 @@ def _slug(text):
 
 def md_to_html(text):
     lines, out, i = text.replace("\r\n", "\n").split("\n"), [], 0
-    block_start = re.compile(r"^(#{1,6}\s|>|```|\[\[(?:youtube|video) |\s*[-*+]\s+|\s*\d+[.)]\s+|(-{3,}|\*{3,})\s*$)")
+    block_start = re.compile(r"^(#{1,6}\s|>|```|\[\[(?:youtube|video|spotify) |\s*[-*+]\s+|\s*\d+[.)]\s+|(-{3,}|\*{3,})\s*$)")
     video = re.compile(r'^\[\[youtube\s+([\w-]{11})(?:\s+"([^"]*)")?\]\]\s*$')
+    spotify = re.compile(r'^\[\[spotify\s+([A-Za-z0-9]{22})(?:\s+"([^"]*)")?\]\]\s*$')
     local_video = re.compile(r'^\[\[video\s+([\w./-]+\.mp4)(?:\s+poster=([\w./-]+\.(?:jpg|jpeg|png|webp)))?(?:\s+ratio=(\d+):(\d+))?(?:\s+"([^"]*)")?\]\]\s*$')
     while i < len(lines):
         line = lines[i]
@@ -62,6 +63,11 @@ def md_to_html(text):
             out.append(f'<figure class="video-file {shape}"><video controls preload="metadata" playsinline'
                        + (f' poster="{esc(poster, True)}"' if poster else "") + f' aria-label="{esc(title or "Video", True)}" style="aspect-ratio:{rw}/{rh}">'
                        f'<source src="{esc(src, True)}" type="video/mp4"><p>Your browser cannot play this video. <a href="{esc(src, True)}">Download it</a>.</p></video></figure>')
+            i += 1
+        elif spotify.match(line):
+            sid, title = spotify.match(line).groups()
+            out.append('<div class="spotify"><iframe src="https://open.spotify.com/embed/episode/' + sid + '" title="' + esc(title or "Spotify episode", True)
+                       + '" loading="lazy" allow="encrypted-media; fullscreen; picture-in-picture" style="border:0;width:100%;height:232px;border-radius:12px"></iframe></div>')
             i += 1
         elif video.match(line):
             vid, title = video.match(line).groups()

@@ -225,3 +225,4 @@ main details[open] summary{color:var(--ice)} main details p{color:var(--muted)}
   .legal-line a{padding:9px 6px 9px 0}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+.spotify{margin:1.8rem 0}
