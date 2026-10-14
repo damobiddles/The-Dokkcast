@@ -5,8 +5,8 @@ date: 2026-10-14
 author: The Dokkcast
 description: Dr Nara Daubeney talks to consultant cardiologist Dr Alexander Lyon about cardio-oncology, and how cancer treatment can affect the heart.
 tags: Episode 13, Cardio-oncology, Cardiology, Cancer
-image: assets/img/about-studio.jpg
-image_alt: Two people in conversation on an orange sofa in The Dokkcast studio, with microphones in front of them
+image: assets/img/episode-13-alexander-lyon.jpg
+image_alt: "Episode 13 of The Dokkcast: Cancer treatment and heart health, with Dr Alexander Lyon, consultant cardiologist at Royal Brompton Hospital"
 ---
 
 **Some cancer treatments can affect the heart during treatment, or even years later.** In Episode 13 of The Dokkcast, [Dr Nara Daubeney](dr-nara-daubeney.html) speaks with Dr Alexander Lyon, consultant cardiologist at the Royal Brompton Hospital, about the rapidly developing field of cardio-oncology.
