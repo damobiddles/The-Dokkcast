@@ -1,0 +1,23 @@
+{
+  "title": "Episode 14 launch: posting plan",
+  "subtitle": "How Did We Get Here? The Rise of Obesity in the UK  ·  with Professor John Deanfield CBE",
+  "month": "October 2026",
+  "release": "2026-10-15",
+  "start": "2026-10-12",
+  "weeks": 2,
+  "days": {
+    "2026-10-12": [{"type": "SITE", "channels": "Blog post live", "note": "Earlier post about the episode"}],
+    "2026-10-13": [{"type": "SITE", "channels": "Blog post live", "note": "Episode 14 launch post"}],
+    "2026-10-15": [
+      {"type": "FEED", "channels": "LinkedIn · Instagram · Facebook · X", "note": "Key art (out now) + launch copy"},
+      {"type": "STORIES", "channels": "Instagram · Facebook", "note": "Out now story art"},
+      {"type": "YOUTUBE", "channels": "Thumbnail, title, chapters", "note": "Pin a comment"},
+      {"type": "EMAIL", "channels": "Newsletter", "note": "Link-preview image included"},
+      {"type": "VIDEO", "channels": "Reels · Shorts · TikTok · LinkedIn", "note": "45-second highlight reel"}
+    ],
+    "2026-10-16": [{"type": "FEED", "channels": "LinkedIn · Instagram · X", "note": "Quote card 2: “biggest driver of ill health”"}],
+    "2026-10-19": [{"type": "FEED", "channels": "LinkedIn · Instagram", "note": "Quote card 4: “investing in our finances”"}],
+    "2026-10-20": [{"type": "FEED", "channels": "Instagram · X · Facebook", "note": "Quote card 3: “elephant in the room”"}],
+    "2026-10-22": [{"type": "FEED", "channels": "All channels", "note": "Quote card 5 + “listen if you missed it”"}]
+  }
+}
