@@ -1,6 +1,6 @@
 ---
 title: "Cancer Treatment and Heart Health: What Patients Need to Know"
-seo_title: "Cancer Treatment and Heart Health | Dr Alexander Lyon | The Dokkcast"
+seo_title: "Cancer Treatment and Heart Health | The Dokkcast"
 date: 2026-10-14
 author: The Dokkcast
 description: Dr Nara Daubeney talks to consultant cardiologist Dr Alexander Lyon about cardio-oncology, and how cancer treatment can affect the heart.
