@@ -7,7 +7,7 @@ One master CSV plus one CSV per channel, in the shape Buffer, Metricool, Later a
 (columns can be renamed in their import step). Times are Europe/London. Posts are marked HOLD until the CHECK items in
 ep14-promo-copy.md are cleared. Image files are named, not linked: bulk uploaders usually want a public URL or a manual attach.
 """
-import csv, json, re
+import csv, json, re, shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -117,6 +117,12 @@ print(len(P), "posts ->", OUT)
 BUF = OUT / "buffer"
 BUF.mkdir(exist_ok=True)
 for old in BUF.glob("*"): old.unlink()
+SITE_IMG = "https://thedokkcast.com/assets/promo/ep14"   # images are copied here so Buffer can fetch them from a public URL
+HOSTED = ROOT / "assets/promo/ep14"
+HOSTED.mkdir(parents=True, exist_ok=True)
+for p in P:
+    if p[5] and not p[5].startswith("highlight") and not p[3].startswith(("Story",)):
+        shutil.copy(ROOT / "promo-output/episode-14" / p[5], HOSTED / p[5])
 MANUAL_TYPES = ("Story", "Reel", "Video", "Short")        # video and stories are not imported from CSV: attach or schedule them by hand
 manual = []
 for ch in sorted({p[2] for p in P}):
@@ -124,7 +130,7 @@ for ch in sorted({p[2] for p in P}):
     if rows_ch:
         with open(BUF / f"buffer_{ch.lower().replace(' ', '_')}.csv", "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f); w.writerow(["Text", "Image URL", "Tags", "Posting Time"])
-            for p in rows_ch: w.writerow([p[4], "", "ep14,launch", f"{p[0]} {p[1]}"])
+            for p in rows_ch: w.writerow([p[4], f"{SITE_IMG}/{p[5]}" if p[5] else "", "ep14,launch", f"{p[0]} {p[1]}"])
     manual += [p for p in rows if p[2] == ch and p not in rows_ch]
 with open(BUF / "buffer_attach_images_checklist.csv", "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f); w.writerow(["channel", "posting_time", "attach_this_file", "alt_text", "first_line_of_post"])
