@@ -130,7 +130,7 @@ for ch in sorted({p[2] for p in P}):
     if rows_ch:
         with open(BUF / f"buffer_{ch.lower().replace(' ', '_')}.csv", "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f); w.writerow(["Text", "Image URL", "Tags", "Posting Time"])
-            for p in rows_ch: w.writerow([p[4], f"{SITE_IMG}/{p[5]}" if p[5] else "", "ep14,launch", f"{p[0]} {p[1]}"])
+            for p in rows_ch: w.writerow([p[4], f"{SITE_IMG}/{p[5]}" if p[5] else "", "", f"{p[0]} {p[1]}"])
     manual += [p for p in rows if p[2] == ch and p not in rows_ch]
 with open(BUF / "buffer_attach_images_checklist.csv", "w", newline="", encoding="utf-8-sig") as f:
     w = csv.writer(f); w.writerow(["channel", "posting_time", "attach_this_file", "alt_text", "first_line_of_post"])
