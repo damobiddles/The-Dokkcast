@@ -136,3 +136,8 @@
   [headers.values]
     X-Robots-Tag = "noindex, noimageindex"
     Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

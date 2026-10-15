@@ -393,9 +393,9 @@ def build():
 {f'<link rel="alternate" type="application/rss+xml" title="{esc(site["show_name"], True)} podcast feed" href="{esc(site["rss_url"], True)}">' if site.get("rss_url") and name != "404.html" else ""}
 {f'<link rel="alternate" type="application/rss+xml" title="{esc(site["show_name"], True)} blog" href="blog/feed.xml">' if posts and base_url and name != "404.html" else ""}
 {extra.get("_head_extra", "")}
-<link rel="icon" href="favicon.ico" sizes="32x32">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="icon" href="favicon.ico?v=3" sizes="32x32">
+<link rel="icon" href="assets/img/favicon.svg?v=3" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png?v=3">
 {jsonld(site, name, title, meta, body, chunk, extra.get('_nodes', ()), extra.get('_crumbs'))}
 <link rel="preload" href="assets/fonts/manrope-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
