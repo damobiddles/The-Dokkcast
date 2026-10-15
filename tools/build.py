@@ -175,7 +175,7 @@ def jsonld(site, name, title, meta, body, chunk, extra_nodes=(), crumbs=None):
     show = site["show_name"]
     nara = {"@type": "Person", "name": "Dr Nara Daubeney", "url": f"{base}/dr-nara-daubeney.html"}
     series = {"@type": "PodcastSeries", "name": show, "url": f"{base}/", "description": site.get("description", ""),
-              "image": f"{base}/assets/img/og-image.png", "author": nara,
+              "image": f"{base}/assets/img/the-dokkcast-cover.jpg", "author": nara,
               "publisher": {"@type": "Organization", "name": "Udokk Ltd", "url": site["udokk_url"]}}
     if site.get("rss_url"):
         series["webFeed"] = site["rss_url"]

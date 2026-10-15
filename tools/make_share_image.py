@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Builds the social share image (assets/img/og-image.png, 1200x630): logo and title on the left, studio photo on the right.
+"""Builds the social share image (assets/img/og-image.png, 1200x630): logo and web address on the left, podcast cover art on the right.
 
     pip install pillow cairosvg fonttools brotli
     python3 tools/make_share_image.py
@@ -30,35 +30,15 @@ def main():
         c = tuple(round(a + (b - a) * t) for a, b in zip((10, 15, 44), (37, 26, 99)))
         for x in range(W):
             px[x, y] = c
-    # photo panel, scaled to the panel height and cropped around the two people
-    ph = Image.open(ROOT / f"assets/img/{PHOTO}.jpg").convert("RGB")
-    pw = W - PHOTO_X
-    scale = H / ph.height
-    ph = ph.resize((round(ph.width * scale), H), Image.LANCZOS)
-    left = max(0, min(ph.width - pw, round(ph.width * 0.56 - pw / 2)))
-    img.paste(ph.crop((left, 0, left + pw, H)), (PHOTO_X, 0))
-    # soft fade from the text panel into the photo
-    fade = Image.new("L", (160, H))
-    fd = ImageDraw.Draw(fade)
-    for x in range(160):
-        fd.line([(x, 0), (x, H)], fill=round(255 * (1 - x / 159)))
-    base = Image.new("RGB", (160, H))
-    bp = base.load()
-    for y in range(H):
-        t = y / (H - 1)
-        c = tuple(round(a + (b - a) * t) for a, b in zip((10, 15, 44), (37, 26, 99)))
-        for x in range(160):
-            bp[x, y] = c
-    img.paste(base, (PHOTO_X, 0), fade)
+    # the podcast cover art on the right
+    cov = Image.open(ROOT / "assets/img/the-dokkcast-cover.jpg").convert("RGB").resize((H, H), Image.LANCZOS)
+    img.paste(cov, (W - H - 0, 0))
     # logo + text
     logo = Image.open(io.BytesIO(cairosvg.svg2png(url=str(ROOT / "assets/img/udokk-logo.svg"), output_height=150))).convert("RGBA")
     img.paste(logo, (70, 62), logo)
     d = ImageDraw.Draw(img)
-    d.text((70, 250), "The", font=font(800, 92), fill="white")
-    d.text((70, 340), "Dokkcast", font=font(800, 92), fill=(117, 192, 251))
-    d.text((72, 470), "Evidence-led health podcast", font=font(700, 34), fill="white")
-    d.text((72, 518), "Hosted by Dr Nara Daubeney", font=font(500, 30), fill=(165, 215, 255))
-    d.text((72, 572), "thedokkcast.com", font=font(500, 26), fill=(180, 189, 219))
+    d.text((70, 335), "Listen and watch", font=font(500, 32), fill=(165, 215, 255))
+    d.text((70, 380), "thedokkcast.com", font=font(800, 50), fill="white")
     img.save(ROOT / "assets/img/og-image.png", optimize=True)
     print("wrote assets/img/og-image.png")
 
