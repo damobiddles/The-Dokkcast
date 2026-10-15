@@ -130,3 +130,9 @@
   for = "/assets/img/*"
   [headers.values]
     Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/assets/promo/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, noimageindex"
+    Cache-Control = "public, max-age=3600"
