@@ -112,3 +112,26 @@ write("ep14_schedule_all.csv", [row(p) for p in rows])
 for ch in sorted({p[2] for p in P}):
     write(f"ep14_schedule_{ch.lower().replace(' ', '_')}.csv", [row(p) for p in rows if p[2] == ch])
 print(len(P), "posts ->", OUT)
+
+# ---- Buffer bulk-import files: Text, Image URL, Tags, Posting Time (one file per channel, because Buffer imports into one channel at a time)
+BUF = OUT / "buffer"
+BUF.mkdir(exist_ok=True)
+for old in BUF.glob("*"): old.unlink()
+MANUAL_TYPES = ("Story", "Reel", "Video", "Short")        # video and stories are not imported from CSV: attach or schedule them by hand
+manual = []
+for ch in sorted({p[2] for p in P}):
+    rows_ch = [p for p in rows if p[2] == ch and not p[3].startswith(MANUAL_TYPES) and p[3] not in ("Video post",)]
+    if rows_ch:
+        with open(BUF / f"buffer_{ch.lower().replace(' ', '_')}.csv", "w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f); w.writerow(["Text", "Image URL", "Tags", "Posting Time"])
+            for p in rows_ch: w.writerow([p[4], "", "ep14,launch", f"{p[0]} {p[1]}"])
+    manual += [p for p in rows if p[2] == ch and p not in rows_ch]
+with open(BUF / "buffer_attach_images_checklist.csv", "w", newline="", encoding="utf-8-sig") as f:
+    w = csv.writer(f); w.writerow(["channel", "posting_time", "attach_this_file", "alt_text", "first_line_of_post"])
+    for p in rows:
+        if not p[3].startswith(MANUAL_TYPES) and p[3] != "Video post" and p[5]:
+            w.writerow([p[2], f"{p[0]} {p[1]}", p[5], p[6], p[4].split("\n")[0][:70]])
+with open(BUF / "buffer_schedule_by_hand.csv", "w", newline="", encoding="utf-8-sig") as f:
+    w = csv.writer(f); w.writerow(["channel", "type", "posting_time", "media", "caption"])
+    for p in manual: w.writerow([p[2], p[3], f"{p[0]} {p[1]}", p[5], p[4]])
+print("buffer files ->", BUF, sorted(x.name for x in BUF.iterdir()))
