@@ -27,7 +27,7 @@ P = []   # (date, time, channel, type, caption, media, alt)
 def add(d, t, ch, typ, cap, media, alt=""): P.append((d, t, ch, typ, cap.strip(), media, alt))
 
 # ---- Thu 15 Oct: launch day
-add("2026-10-15", "08:30", "LinkedIn", "Image post", f"""Episode 14 of The Dokkcast is out now.
+add("2026-10-15", "11:30", "LinkedIn", "Image post", f"""Episode 14 of The Dokkcast is out now.
 
 How Did We Get Here? The Rise of Obesity in the UK, with Professor John Deanfield CBE.
 
@@ -45,7 +45,7 @@ Listen and watch: {link('linkedin','social')}
 {GEN}
 
 {TAGS} #PublicHealth""", "ep14_keyart_nowout_portrait_1080x1350.jpg", ALT_KEY)
-add("2026-10-15", "08:45", "Instagram", "Feed image", f"""New episode out now. Episode 14: How Did We Get Here? The Rise of Obesity in the UK.
+add("2026-10-15", "11:45", "Instagram", "Feed image", f"""New episode out now. Episode 14: How Did We Get Here? The Rise of Obesity in the UK.
 
 Dr Nara Daubeney talks to Professor John Deanfield CBE about why obesity is a medical issue, not just a cosmetic one, and why it is not a failure of willpower.
 
@@ -56,26 +56,26 @@ Listen on Spotify, Apple Podcasts or YouTube. Link in bio.
 {GEN}
 
 {TAGS}""", "ep14_keyart_nowout_portrait_1080x1350.jpg", ALT_KEY)
-add("2026-10-15", "09:00", "Instagram", "Story", "Episode 14 is out now. (Add a link sticker to the episode.)", "ep14_keyart_nowout_story_1080x1920.jpg", ALT_KEY)
-add("2026-10-15", "09:00", "Facebook", "Image post", f"""Episode 14 of The Dokkcast is out now.
+add("2026-10-15", "12:00", "Instagram", "Story", "Episode 14 is out now. (Add a link sticker to the episode.)", "ep14_keyart_nowout_story_1080x1920.jpg", ALT_KEY)
+add("2026-10-15", "12:00", "Facebook", "Image post", f"""Episode 14 of The Dokkcast is out now.
 
 How Did We Get Here? The Rise of Obesity in the UK. Dr Nara Daubeney is joined by Professor John Deanfield CBE, a cardiologist at University College London, to talk about why obesity matters for our health, why it is not simply a question of willpower, and what prevention could look like.
 
 Listen and watch: {link('facebook','social')}
 
 {GEN}""", "ep14_keyart_nowout_square_1080x1080.jpg", ALT_KEY)
-add("2026-10-15", "09:00", "Facebook", "Story", "Episode 14 is out now.", "ep14_keyart_nowout_story_1080x1920.jpg", ALT_KEY)
-add("2026-10-15", "09:15", "X", "Image post", f"""Episode 14 of The Dokkcast is out.
+add("2026-10-15", "12:00", "Facebook", "Story", "Episode 14 is out now.", "ep14_keyart_nowout_story_1080x1920.jpg", ALT_KEY)
+add("2026-10-15", "12:15", "X", "Image post", f"""Episode 14 of The Dokkcast is out.
 
 How Did We Get Here? The Rise of Obesity in the UK, with Professor John Deanfield CBE.
 
 Listen and watch: {link('x','social')}""", "ep14_keyart_nowout_link_1200x630.jpg", ALT_KEY)
-add("2026-10-15", "12:00", "Instagram", "Reel", "A short highlight from Episode 14 of The Dokkcast, with Professor John Deanfield CBE. Full episode: link in bio.\n\n#TheDokkcast #HealthPodcast", REEL)
-add("2026-10-15", "12:00", "TikTok", "Video", "A short highlight from Episode 14 of The Dokkcast, with Professor John Deanfield CBE. Full episode on Spotify, Apple Podcasts and YouTube.\n\n#TheDokkcast #HealthPodcast #Obesity", REEL)
-add("2026-10-15", "12:00", "YouTube Shorts", "Short", "A short highlight from Episode 14 of The Dokkcast, with Professor John Deanfield CBE. Full episode on our channel. #TheDokkcast #HealthPodcast", REEL)
-add("2026-10-15", "12:30", "LinkedIn", "Video post", f"A 45-second highlight from Episode 14 of The Dokkcast, with Professor John Deanfield CBE.\n\nFull episode: {link('linkedin','social')}\n\n{GEN}", REEL)
-add("2026-10-15", "13:00", "X", "Text post", f"On willpower: a collective failure of willpower is very unlikely, he says. What has changed is the world around us: how we eat, work and spend our time.\n\nBoth the individual and the environment matter. “One without the other is not going to work.”", "")
-add("2026-10-15", "15:00", "X", "Image post", f"{quote(2)}\n\nProfessor John Deanfield CBE, on The Dokkcast", "ep14_quote2_square_1080x1080.png", alt_q(2))
+add("2026-10-15", "13:00", "Instagram", "Reel", "A short highlight from Episode 14 of The Dokkcast, with Professor John Deanfield CBE. Full episode: link in bio.\n\n#TheDokkcast #HealthPodcast", REEL)
+add("2026-10-15", "13:00", "TikTok", "Video", "A short highlight from Episode 14 of The Dokkcast, with Professor John Deanfield CBE. Full episode on Spotify, Apple Podcasts and YouTube.\n\n#TheDokkcast #HealthPodcast #Obesity", REEL)
+add("2026-10-15", "13:00", "YouTube Shorts", "Short", "A short highlight from Episode 14 of The Dokkcast, with Professor John Deanfield CBE. Full episode on our channel. #TheDokkcast #HealthPodcast", REEL)
+add("2026-10-15", "13:30", "LinkedIn", "Video post", f"A 45-second highlight from Episode 14 of The Dokkcast, with Professor John Deanfield CBE.\n\nFull episode: {link('linkedin','social')}\n\n{GEN}", REEL)
+add("2026-10-15", "15:00", "X", "Text post", f"On willpower: a collective failure of willpower is very unlikely, he says. What has changed is the world around us: how we eat, work and spend our time.\n\nBoth the individual and the environment matter. “One without the other is not going to work.”", "")
+add("2026-10-15", "16:30", "X", "Image post", f"{quote(2)}\n\nProfessor John Deanfield CBE, on The Dokkcast", "ep14_quote2_square_1080x1080.png", alt_q(2))
 
 # ---- later in the week: quote cards
 add("2026-10-16", "08:30", "LinkedIn", "Image post", f"{quote(2)}\n\nProfessor John Deanfield CBE on Episode 14 of The Dokkcast, with Dr Nara Daubeney.\n\nListen: {link('linkedin','social')}\n\n{GEN}\n\n{TAGS}", "ep14_quote2_portrait_1080x1350.png", alt_q(2))
