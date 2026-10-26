@@ -3,3 +3,5 @@
 __pycache__/
 promo-output/
 node_modules/
+.env
+*.env
