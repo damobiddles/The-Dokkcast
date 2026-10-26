@@ -169,3 +169,7 @@ Search the `pages/` folder for `class="placeholder"`. These need real content:
 
 udokk logo (`assets/img/udokk-logo.svg`), Manrope (SIL OFL licence in `assets/fonts`), and the
 logo gradient `#716BE8` to `#A5D7FF` on navy.
+
+## Outreach HQ (internal page)
+
+`outreach-hq/index.html` is a standalone page for the Udokk outreach team (Today checklist, DM scripts, who to contact, rules, end-of-day form). It is not built by `tools/build.py`, is not in the nav or sitemap, and is marked `noindex` (meta tag plus an `X-Robots-Tag` header in `netlify.toml`). The end-of-day form uses Netlify Forms (form name `outreach-report`): view submissions in Netlify under Forms, and add an email notification there if you want them sent to you.

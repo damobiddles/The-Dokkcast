@@ -141,3 +141,9 @@
   for = "/favicon.ico"
   [headers.values]
     Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/outreach-hq/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive, noimageindex"
+    Cache-Control = "no-cache"

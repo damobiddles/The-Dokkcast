@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outreach HQ | Udokk</title>
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<meta name="theme-color" content="#0a0f2c">
+<link rel="icon" href="../favicon.ico?v=3" sizes="32x32">
+<link rel="icon" href="../assets/img/favicon.svg?v=3" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png?v=3">
+<style>
+@font-face{font-family:Manrope;font-weight:400;font-display:swap;src:url(../assets/fonts/manrope-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:Manrope;font-weight:500;font-display:swap;src:url(../assets/fonts/manrope-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:Manrope;font-weight:700;font-display:swap;src:url(../assets/fonts/manrope-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:Manrope;font-weight:800;font-display:swap;src:url(../assets/fonts/manrope-latin-800-normal.woff2) format("woff2")}
+/* Outreach HQ: same look as The Dokkcast (udokk gradient on navy, Manrope). Internal page: not indexed, not linked from the site. */
+:root{
+  --navy:#0a0f2c; --indigo:#251a63; --violet:#716be8; --blue:#5a99f5; --sky:#75c0fb; --ice:#a5d7ff;
+  --bg:#0a0f2c; --surface:rgba(255,255,255,.06); --surface-solid:#141a46; --ink:#eef2ff; --muted:#b4bddb; --line:rgba(165,215,255,.2);
+  --accent:var(--sky); --accent-soft:rgba(117,192,251,.14);
+  --amber:#f5c26b; --amber-soft:rgba(245,194,107,.14);
+  --good:#7be0a4; --good-soft:rgba(123,224,164,.14); --warn:#ffa57a; --warn-soft:rgba(255,165,122,.14);
+  --grad:linear-gradient(135deg,var(--violet),var(--blue) 55%,var(--sky));
+  --display:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif; --body:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;background:var(--navy)}
+body{margin:0;background:linear-gradient(180deg,var(--navy) 0,var(--indigo) 100%);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;min-height:100vh}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{position:sticky;top:0;z-index:5;background:rgba(10,15,44,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:12px 6px}
+.brand .name{display:flex;align-items:center;gap:12px}
+.brand img{height:38px;width:auto}
+.brand h1{font-weight:800;font-size:1.3rem;margin:0;letter-spacing:-.01em}
+.brand h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.who{display:flex;gap:4px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;padding:3px}
+.who button{border:0;background:transparent;color:var(--muted);font:700 .85rem var(--body);padding:6px 14px;border-radius:999px;cursor:pointer}
+.who button[aria-pressed="true"]{background:var(--grad);color:var(--navy)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{flex:none;text-decoration:none;color:var(--muted);font-weight:700;font-size:.9rem;padding:10px 12px;border-bottom:2px solid transparent}
+nav.tabs a:hover{color:#fff}
+nav.tabs a[aria-current="page"]{color:#fff;border-color:var(--sky)}
+a{color:var(--sky)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--sky);outline-offset:3px;border-radius:6px}
+main{padding-block:24px 64px}
+section[data-view]{display:grid;gap:22px}
+h2{font-weight:800;font-size:1.7rem;line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.02em}
+h3{font-weight:800;font-size:1.15rem;margin:0}
+p{margin:0;max-width:65ch}
+.lead{color:var(--muted)}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.stack{display:grid;gap:12px}
+.pitch{border-left:4px solid var(--sky);background:var(--accent-soft);border-radius:0 14px 14px 0;padding:14px 16px}
+.pitch strong{display:block;font-weight:800;font-size:1.05rem;margin-bottom:2px}
+.targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.target{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.target b{display:block;font-weight:800;font-size:1.9rem;line-height:1.1;font-variant-numeric:tabular-nums;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.target span{font-size:.85rem;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.step{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.step input{width:20px;height:20px;margin-top:3px;accent-color:var(--sky)}
+.step label{cursor:pointer;min-width:0}
+.step label b{font-weight:700}
+.step label small{display:block;color:var(--muted);font-size:.9rem}
+.step .mins{font-variant-numeric:tabular-nums;font-size:.8rem;font-weight:700;color:var(--sky);background:var(--accent-soft);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.step.done{opacity:.6}.step.done label b{text-decoration:line-through}
+.step.break{background:var(--amber-soft);border-color:transparent}
+.step.break .mins{background:rgba(255,255,255,.08);color:var(--amber)}
+.progress{height:6px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--grad);width:0;transition:width .3s}
+@media (prefers-reduced-motion:reduce){.progress i{transition:none}html{scroll-behavior:auto}}
+.script{display:grid;gap:10px}
+.script blockquote{margin:0;background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:12px;padding:12px 14px;white-space:pre-wrap}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.btn{font:700 .9rem var(--body);border-radius:999px;padding:9px 18px;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink)}
+.btn:hover{background:rgba(255,255,255,.12)}
+.btn.primary{background:var(--grad);border-color:transparent;color:var(--navy)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.small{padding:5px 13px;font-size:.82rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.82rem;background:var(--accent-soft);color:var(--ice);border-radius:999px;padding:3px 11px;font-weight:600}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+tr:last-child td{border-bottom:0}
+.do td:first-child{color:var(--good)}.do td:last-child{color:var(--warn)}
+form.report{display:grid;gap:16px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:540px){.fields{grid-template-columns:1fr}}
+.field{display:grid;gap:6px;min-width:0}
+.field label{font-weight:700;font-size:.9rem}
+.field .hint{font-size:.8rem;color:var(--muted)}
+input[type=number],input[type=date],input[type=text],textarea,select{font:inherit;color:var(--ink);background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;padding:9px 12px;width:100%;min-width:0}
+select option{background:var(--surface-solid);color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+.stepper{display:grid;grid-template-columns:42px 1fr 42px;gap:6px}
+.stepper button{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);border-radius:12px;font-size:1.2rem;cursor:pointer}
+.stepper input{text-align:center;font-variant-numeric:tabular-nums;font-weight:700}
+.feel{display:flex;gap:8px;flex-wrap:wrap}
+.feel label{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;font-weight:600}
+.feel input{accent-color:var(--sky)}
+.status{font-size:.9rem;padding:10px 14px;border-radius:12px}
+.status.ok{background:var(--good-soft);color:var(--good)}
+.status.err{background:var(--warn-soft);color:var(--warn)}
+.status.info{background:var(--accent-soft);color:var(--ice)}
+.foot{border-top:1px solid var(--line);padding-block:20px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <div class="name"><img src="../assets/img/udokk-logo.svg" alt="" width="34" height="38"><h1>Outreach <span>HQ</span></h1></div>
+      <div class="who" role="group" aria-label="Who is using this page">
+        <button type="button" id="who-katie" data-who="Katie" aria-pressed="true">Katie</button>
+        <button type="button" id="who-medha" data-who="Medha" aria-pressed="false">Medha</button>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#today" data-tab="today">Today</a>
+      <a href="#scripts" data-tab="scripts">Scripts</a>
+      <a href="#contacts" data-tab="contacts">Who to contact</a>
+      <a href="#rules" data-tab="rules">Rules</a>
+      <a href="#report" data-tab="report">End of day</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- TODAY -->
+<section data-view="today">
+  <div class="stack">
+    <p class="eyebrow" id="today-date">Today</p>
+    <h2 id="today-title">Your 3-hour shift</h2>
+    <p class="lead">Same six steps every day. Instagram first, because that's where most results come from. Tick them off as you go.</p>
+  </div>
+  <div class="pitch" id="pitch"></div>
+  <div class="targets" aria-label="Today's targets">
+    <div class="target"><b>10</b><span>Instagram DMs</span></div>
+    <div class="target"><b>10</b><span>Instagram comments</span></div>
+    <div class="target"><b>10</b><span>TikTok comments</span></div>
+    <div class="target"><b>1</b><span>End-of-day form</span></div>
+  </div>
+  <div class="stack">
+    <div class="row"><h3>The routine</h3><span class="lead" id="prog-label">0 of 6 done</span></div>
+    <div class="progress" aria-hidden="true"><i id="prog-bar"></i></div>
+    <ol class="steps" id="steps"></ol>
+  </div>
+  <div class="panel stack">
+    <h3>When someone says yes</h3>
+    <p>Thank them, then message Damien straight away with their handle. Don't promise anything yourself. Damien takes it from there.</p>
+  </div>
+</section>
+
+<!-- SCRIPTS -->
+<section data-view="scripts" hidden>
+  <div class="stack">
+    <h2>DM scripts</h2>
+    <p class="lead">Starting points, never copy-paste jobs. Every DM needs one specific thing about their account. That one line is what gets replies.</p>
+  </div>
+  <div class="panel stack">
+    <p class="eyebrow">The formula</p>
+    <p><strong>Hi</strong> + something specific about them + who we are in one line + one easy question. Under 60 words. No links in the first message unless they ask.</p>
+  </div>
+  <div class="stack" id="scripts-list"></div>
+  <div class="stack">
+    <h3>Good comments</h3>
+    <p class="lead">A full sentence about their post. Not an emoji, not "great post", not about us.</p>
+    <ul class="plain">
+      <li>"This is such a clear way to explain gut health. The fibre tip is one I'll actually use."</li>
+      <li>"Really honest post. More people need to hear that recovery isn't a straight line."</li>
+      <li>"Brilliant initiative. How can people get involved in the next one?"</li>
+    </ul>
+  </div>
+  <div class="panel stack">
+    <h3>On TikTok</h3>
+    <p>Most creators only accept DMs from people they follow back, and the rest land in a requests folder. So on TikTok, lead with comments. DM only once they follow us back or clearly accept messages, and keep it to 5 a day.</p>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section data-view="contacts" hidden>
+  <div class="stack">
+    <h2>Who to contact</h2>
+    <p class="lead">Aim for a mix every day: about 6 people and 4 organisations.</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Type</th><th>Examples</th><th>Good size</th></tr></thead>
+      <tbody>
+        <tr><td>Influencers and creators</td><td>Nutritionists, personal trainers, physios, doctors and nurses who post, mental health advocates, running and recovery accounts</td><td>2k–100k followers</td></tr>
+        <tr><td>Organisations</td><td>Health charities, supplement and wellness brands, clinics, gyms, health tech start-ups, NHS-linked groups</td><td>Any size, if active</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="stack">
+    <h3>How to find them</h3>
+    <div class="chips"><span class="chip">#healthtips</span><span class="chip">#wellness</span><span class="chip">#nutrition</span><span class="chip">#mentalhealthmatters</span><span class="chip">#physio</span><span class="chip">#womenshealth</span><span class="chip">#ukfitness</span></div>
+    <ul class="plain">
+      <li>Open an account you like and look at "Suggested for you" under their Follow button.</li>
+      <li>Check who comments on and tags our posts. They already know us.</li>
+      <li>Look at who follows similar accounts: charities, health podcasts.</li>
+    </ul>
+  </div>
+  <div class="panel stack">
+    <h3>Skip anyone who</h3>
+    <ul class="plain">
+      <li>sells miracle cures or unproven treatments</li>
+      <li>hasn't posted in the last month</li>
+      <li>has big numbers but no comments (bought followers)</li>
+      <li>posts anything offensive</li>
+    </ul>
+    <p>Never message the same account twice in one week. If unsure, ask Damien.</p>
+  </div>
+</section>
+
+<!-- RULES -->
+<section data-view="rules" hidden>
+  <div class="stack">
+    <h2>Rules</h2>
+    <p class="lead">If Instagram or TikTok shows a warning or blocks actions, stop for the day and tell Damien.</p>
+  </div>
+  <div class="tablewrap">
+    <table class="do">
+      <thead><tr><th>Do</th><th>Don't</th></tr></thead>
+      <tbody>
+        <tr><td>Personalise every single DM</td><td>Send the same message to everyone (it gets flagged as spam)</td></tr>
+        <tr><td>Spread DMs across the session</td><td>Send more than 20 DMs or 50 follows in an hour</td></tr>
+        <tr><td>Be friendly, short and professional</td><td>Use slang, lots of emojis, or "hey babe"</td></tr>
+        <tr><td>Describe what we offer accurately</td><td>Give health advice, or promise money, deals or guest spots</td></tr>
+        <tr><td>Pass interested people to Damien</td><td>Agree to anything on Damien's behalf</td></tr>
+        <tr><td>Take your break and finish on time</td><td>Reply to outreach outside working hours</td></tr>
+        <tr><td>Ask Damien if unsure</td><td>Argue with anyone, even if they're rude</td></tr>
+        <tr><td>Log every contact in the tracker</td><td>Message anyone twice in a week, or anyone under 18</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- END OF DAY FORM -->
+<section data-view="report" hidden>
+  <div class="stack">
+    <h2 id="form-title">End-of-day report</h2>
+    <p class="lead">Two minutes, before you finish. Be honest: a short day is fine, a missing report isn't.</p>
+  </div>
+  <form class="report panel" id="report-form" name="outreach-report" method="POST" action="/outreach-hq/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <input type="hidden" name="form-name" value="outreach-report">
+    <p hidden><label>Do not fill this in: <input name="bot-field"></label></p>
+    <div class="fields">
+      <div class="field"><label for="f-name">Name</label>
+        <select id="f-name" name="name"><option>Katie</option><option>Medha</option></select></div>
+      <div class="field"><label for="f-date">Date</label><input type="date" id="f-date" name="date" required></div>
+    </div>
+    <div class="fields">
+      <div class="field"><label for="f-igdm">Instagram DMs sent</label><div class="stepper"><button type="button" data-step="-1" aria-label="One fewer">−</button><input type="number" id="f-igdm" name="instagram_dms" min="0" max="99" value="0" inputmode="numeric"><button type="button" data-step="1" aria-label="One more">+</button></div><span class="hint">Target 10</span></div>
+      <div class="field"><label for="f-igc">Instagram comments</label><div class="stepper"><button type="button" data-step="-1" aria-label="One fewer">−</button><input type="number" id="f-igc" name="instagram_comments" min="0" max="99" value="0" inputmode="numeric"><button type="button" data-step="1" aria-label="One more">+</button></div><span class="hint">Target 10</span></div>
+      <div class="field"><label for="f-ttc">TikTok comments</label><div class="stepper"><button type="button" data-step="-1" aria-label="One fewer">−</button><input type="number" id="f-ttc" name="tiktok_comments" min="0" max="99" value="0" inputmode="numeric"><button type="button" data-step="1" aria-label="One more">+</button></div><span class="hint">Target 10</span></div>
+      <div class="field"><label for="f-ttdm">TikTok DMs sent</label><div class="stepper"><button type="button" data-step="-1" aria-label="One fewer">−</button><input type="number" id="f-ttdm" name="tiktok_dms" min="0" max="99" value="0" inputmode="numeric"><button type="button" data-step="1" aria-label="One more">+</button></div><span class="hint">Up to 5, not scored</span></div>
+      <div class="field"><label for="f-rep">Replies received today</label><div class="stepper"><button type="button" data-step="-1" aria-label="One fewer">−</button><input type="number" id="f-rep" name="replies" min="0" max="99" value="0" inputmode="numeric"><button type="button" data-step="1" aria-label="One more">+</button></div><span class="hint">Any platform</span></div>
+      <div class="field"><label for="f-int">Interested, passed to Damien</label><div class="stepper"><button type="button" data-step="-1" aria-label="One fewer">−</button><input type="number" id="f-int" name="interested" min="0" max="99" value="0" inputmode="numeric"><button type="button" data-step="1" aria-label="One more">+</button></div><span class="hint">People who want to talk</span></div>
+    </div>
+    <div class="field"><label for="f-leads">Their handles</label><input type="text" id="f-leads" name="handles" placeholder="@account, @account"></div>
+    <div class="field"><label for="f-best">Best conversation today</label><textarea id="f-best" name="best_conversation" placeholder="One line is plenty"></textarea></div>
+    <div class="field"><label for="f-prob">Problems or questions</label><textarea id="f-prob" name="problems" placeholder="Or leave blank"></textarea></div>
+    <fieldset class="field" style="border:0;padding:0;margin:0">
+      <legend style="font-weight:600;font-size:.9rem;margin-bottom:6px">How did today feel?</legend>
+      <div class="feel">
+        <label><input type="radio" name="feel" id="feel-easy" value="Easy"> Easy</label>
+        <label><input type="radio" name="feel" id="feel-fine" value="Fine" checked> Fine</label>
+        <label><input type="radio" name="feel" id="feel-too" value="Too much"> Too much</label>
+      </div>
+    </fieldset>
+    <div id="form-status" class="status info" hidden></div>
+    <div class="row"><span class="lead" id="pass-preview">Targets not met yet</span><button class="btn primary" type="submit" id="f-submit">Send report</button></div>
+  </form>
+</section>
+
+</main>
+<div class="wrap foot">Internal page for the Udokk outreach team. Please don't share the link.</div>
+<script>
+(function(){
+  const PEOPLE = {
+    Katie: {
+      product: "Udokk",
+      pitch: "<strong>Katie promotes Udokk</strong>A social app for iPhone and Android where health advice and content is verified, so people can trust what they read. We want health creators and brands on it.",
+      scripts: [
+        ["To a creator", "Hi [name], loved your post on [topic]. The bit about [detail] was spot on. I'm Katie from Udokk, a new social app where health content is verified so people can trust it. We'd love creators like you on there. Would you be open to hearing more?"],
+        ["To an organisation", "Hi [organisation] team, really impressed by your work on [campaign/topic]. I'm Katie from Udokk, a social app for verified health advice and content. We think your audience and ours overlap a lot. Who would be the best person to chat to about working together?"]
+      ]
+    },
+    Medha: {
+      product: "Dokkcast",
+      pitch: "<strong>Medha promotes the Dokkcast</strong>The Udokk podcast: long conversations with surgeons, medical professionals and remarkable people, recently explorer Simon Daglish, founder of the Walking Wounded charity.",
+      scripts: [
+        ["To a creator", "Hi [name], your post on [topic] really stuck with me. I'm Medha from the Dokkcast, a podcast where we talk to surgeons, medical experts and people like explorer Simon Daglish of Walking Wounded. I think you'd enjoy our episode on [related topic]. Can I send it over?"],
+        ["To an organisation (possible guest)", "Hi [organisation] team, I've been following your work on [topic]. I'm Medha from the Dokkcast, where we have in-depth conversations with leading health voices. Would someone from your team be interested in coming on as a guest?"]
+      ]
+    }
+  };
+  const STEPS = [
+    ["Replies", "Answer every reply, comment and DM from yesterday on Instagram and TikTok. Warm leads first.", 15],
+    ["Instagram outreach", "Take your 10 lined-up accounts. Follow, like 2 posts, leave 1 genuine comment, then send a personal DM.", 75],
+    ["Break", "Away from the screen. Not optional.", 15, true],
+    ["TikTok engagement", "Follow and comment on 10 health and wellness creators' videos. DM up to 5 who follow us back.", 40],
+    ["Line up tomorrow", "Find and log tomorrow's 10 Instagram accounts in the tracker.", 20],
+    ["Report", "Final reply check, then fill in the End of day form.", 15]
+  ];
+
+  const store = {
+    get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+    set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  };
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const pad = n => String(n).padStart(2, "0");
+  const iso = d => d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate());
+  const todayIso = iso(new Date());
+  const fmtDay = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d).toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short"}); };
+
+  let who = store.get("hq-who", "Katie"); if (!PEOPLE[who]) who = "Katie";
+
+  /* ---------- tabs ---------- */
+  const TABS = ["today","scripts","contacts","rules","report"];
+  function show(tab){
+    if (!TABS.includes(tab)) tab = "today";
+    document.querySelectorAll("section[data-view]").forEach(s => s.hidden = s.dataset.view !== tab);
+    document.querySelectorAll("nav.tabs a").forEach(a => a.setAttribute("aria-current", a.dataset.tab === tab ? "page" : "false"));
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll("nav.tabs a").forEach(a => a.addEventListener("click", e => { e.preventDefault(); show(a.dataset.tab); }));
+  show((location.hash || "").slice(1));
+
+  /* ---------- who ---------- */
+  function setWho(name){
+    who = name; store.set("hq-who", name);
+    document.querySelectorAll(".who button").forEach(b => b.setAttribute("aria-pressed", b.dataset.who === name ? "true" : "false"));
+    $("#pitch").innerHTML = PEOPLE[name].pitch;
+    $("#today-title").textContent = name + "'s 3-hour shift";
+    $("#f-name").value = name;
+    renderScripts(); renderSteps(); updatePreview();
+  }
+  document.querySelectorAll(".who button").forEach(b => b.addEventListener("click", () => setWho(b.dataset.who)));
+
+  /* ---------- today checklist (kept in this browser only) ---------- */
+  $("#today-date").textContent = new Date().toLocaleDateString("en-GB", {weekday:"long", day:"numeric", month:"long"});
+  function renderSteps(){
+    const key = "hq-steps-" + who + "-" + todayIso;
+    const done = store.get(key, []);
+    const ol = $("#steps"); ol.innerHTML = "";
+    STEPS.forEach((s, i) => {
+      const li = document.createElement("li");
+      li.className = "step" + (s[3] ? " break" : "") + (done.includes(i) ? " done" : "");
+      li.innerHTML = '<input type="checkbox" id="step-' + i + '"' + (done.includes(i) ? " checked" : "") + '><label for="step-' + i + '"><b>' + esc(s[0]) + '</b><small>' + esc(s[1]) + '</small></label><span class="mins">' + s[2] + ' min</span>';
+      li.querySelector("input").addEventListener("change", e => {
+        const cur = store.get(key, []).filter(x => x !== i);
+        if (e.target.checked) cur.push(i);
+        store.set(key, cur); renderSteps();
+      });
+      ol.appendChild(li);
+    });
+    $("#prog-label").textContent = done.length + " of " + STEPS.length + " done";
+    $("#prog-bar").style.width = (done.length / STEPS.length * 100) + "%";
+  }
+
+  /* ---------- scripts ---------- */
+  function renderScripts(){
+    const list = $("#scripts-list"); list.innerHTML = "";
+    const h = document.createElement("h3"); h.textContent = who + " · " + PEOPLE[who].product; list.appendChild(h);
+    PEOPLE[who].scripts.forEach(([label, text], i) => {
+      const div = document.createElement("div"); div.className = "panel script";
+      div.innerHTML = '<div class="row"><b>' + esc(label) + '</b><button class="btn small" type="button" id="copy-' + i + '">Copy</button></div><blockquote id="script-' + i + '">' + esc(text) + '</blockquote>';
+      div.querySelector("button").addEventListener("click", async e => {
+        const btn = e.currentTarget;
+        try { await navigator.clipboard.writeText(text); btn.textContent = "Copied"; }
+        catch(err){ const r = document.createRange(); r.selectNodeContents(div.querySelector("blockquote")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); btn.textContent = "Selected, press copy"; }
+        setTimeout(() => btn.textContent = "Copy", 1800);
+      });
+      list.appendChild(div);
+    });
+    const note = document.createElement("p"); note.className = "lead";
+    note.textContent = "Swap in the brackets with real details before sending. Personalise the first line every time.";
+    list.appendChild(note);
+  }
+
+  /* ---------- form ---------- */
+  const NUMS = ["f-igdm","f-igc","f-ttc","f-ttdm","f-rep","f-int"];
+  $("#f-date").value = todayIso;
+  document.querySelectorAll(".stepper").forEach(st => {
+    const input = st.querySelector("input");
+    st.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+      input.value = Math.max(0, Math.min(99, (parseInt(input.value, 10) || 0) + Number(b.dataset.step)));
+      updatePreview();
+    }));
+    input.addEventListener("input", updatePreview);
+  });
+  const num = id => Math.max(0, parseInt($("#" + id).value, 10) || 0);
+  function updatePreview(){
+    const ok = num("f-igdm") >= 10 && num("f-igc") >= 10 && num("f-ttc") >= 10;
+    $("#pass-preview").textContent = ok ? "All daily targets met" : "Targets not met yet: 10 / 10 / 10";
+  }
+  function status(kind, text){ const s = $("#form-status"); s.className = "status " + kind; s.textContent = text; s.hidden = false; }
+
+  const form = $("#report-form");
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    const date = $("#f-date").value;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)){ status("err", "Pick the date this report is for."); return; }
+    const name = $("#f-name").value;
+    const fd = new FormData(form);
+    fd.set("submitted_at", new Date().toISOString());
+    const btn = $("#f-submit"); btn.disabled = true; status("info", "Sending\u2026");
+    try {
+      const res = await fetch(form.getAttribute("action"), {
+        method: "POST",
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: new URLSearchParams(fd).toString()
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      status("ok", "Report sent for " + name + ", " + fmtDay(date) + ". Thanks, that's you done for the day.");
+      ["f-leads","f-best","f-prob"].forEach(id => $("#" + id).value = "");
+      NUMS.forEach(id => $("#" + id).value = 0); updatePreview();
+    } catch(err){
+      status("err", "The report didn't send. Check your connection and press Send report again. If it keeps failing, message Damien.");
+    } finally { btn.disabled = false; }
+  });
+
+  setWho(who);
+
+})();
+</script>
+</body>
+</html>
