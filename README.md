@@ -174,9 +174,6 @@ logo gradient `#716BE8` to `#A5D7FF` on navy.
 
 `outreach-hq/index.html` is a standalone page for the Udokk outreach team (Today checklist, DM scripts, who to contact, rules, end-of-day form). `outreach-hq/scorecard/index.html` is the admin scorecard. Neither is built by `tools/build.py`, linked from the site or listed in the sitemap, and both are `noindex`.
 
-- **Passwords** are checked by the edge function `netlify/edge-functions/outreach-auth.ts` (browser login box). Set two environment variables in Netlify (Site configuration > Environment variables); no passwords are stored in the repo:
-  - `OUTREACH_TEAM_PASSWORD`: one shared password for the team page and the report form (any username).
-  - `OUTREACH_ADMIN_USERS`: admin logins for the scorecard as `name:password` pairs separated by commas, for example `damien:longpass1,partner:longpass2`. Admins can open the team page too.
-  - If a variable is missing, that area stays locked. Redeploy after changing them.
+- **Passwords are currently OFF.** The edge function that asked for a login (`netlify/edge-functions/outreach-auth.ts`) was removed, so anyone with the link can open the team page and the scorecard. It is still `noindex` and unlinked. The previous version is in git history (commit "Password-protect Outreach HQ") if you want to bring it back.
 - **Reports** are saved by `netlify/functions/outreach-report.mjs` into Netlify Blobs (one report per person per day; sending again replaces it). The scorecard reads them through `netlify/functions/outreach-scorecard-data.mjs`.
 - Needs `package.json` (`@netlify/blobs`) and Node 22, set in `netlify.toml`.
