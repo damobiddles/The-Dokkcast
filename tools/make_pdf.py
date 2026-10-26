@@ -87,7 +87,7 @@ footer p{{margin-bottom:1mm}}
   <div class="box host">
     <img src="{uri('assets/img/nara.jpg')}" alt="">
     <div><h2>Your host</h2><strong>Dr Nara Daubeney</strong><small>CONSULTANT ENT SURGEON &amp; ENTREPRENEUR, LONDON</small>
-    <p>PhD in immunology from Imperial College, Fellow of the Royal College of Surgeons, Honorary Secretary of ENTUK and Clinical Lead for Innovation at the Royal Society of Medicine.</p></div>
+    <p>PhD in immunology from Imperial College, Fellow of the Royal College of Surgeons, previous Honorary Secretary of ENTUK and Clinical Lead for Innovation at the Royal Society of Medicine.</p></div>
   </div>
   <div class="box">
     <h2>Our guests</h2>
