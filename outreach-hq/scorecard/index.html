@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outreach scorecard | Udokk</title>
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<meta name="theme-color" content="#0a0f2c">
+<link rel="icon" href="../../favicon.ico?v=3" sizes="32x32">
+<link rel="icon" href="../../assets/img/favicon.svg?v=3" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png?v=3">
+<style>
+@font-face{font-family:Manrope;font-weight:400;font-display:swap;src:url(../../assets/fonts/manrope-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:Manrope;font-weight:500;font-display:swap;src:url(../../assets/fonts/manrope-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:Manrope;font-weight:700;font-display:swap;src:url(../../assets/fonts/manrope-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:Manrope;font-weight:800;font-display:swap;src:url(../../assets/fonts/manrope-latin-800-normal.woff2) format("woff2")}
+/* Outreach HQ: same look as The Dokkcast (udokk gradient on navy, Manrope). Internal page: not indexed, not linked from the site. */
+:root{
+  --navy:#0a0f2c; --indigo:#251a63; --violet:#716be8; --blue:#5a99f5; --sky:#75c0fb; --ice:#a5d7ff;
+  --bg:#0a0f2c; --surface:rgba(255,255,255,.06); --surface-solid:#141a46; --ink:#eef2ff; --muted:#b4bddb; --line:rgba(165,215,255,.2);
+  --accent:var(--sky); --accent-soft:rgba(117,192,251,.14);
+  --amber:#f5c26b; --amber-soft:rgba(245,194,107,.14);
+  --good:#7be0a4; --good-soft:rgba(123,224,164,.14); --warn:#ffa57a; --warn-soft:rgba(255,165,122,.14);
+  --grad:linear-gradient(135deg,var(--violet),var(--blue) 55%,var(--sky));
+  --display:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif; --body:Manrope,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;background:var(--navy)}
+body{margin:0;background:linear-gradient(180deg,var(--navy) 0,var(--indigo) 100%);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;min-height:100vh}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{position:sticky;top:0;z-index:5;background:rgba(10,15,44,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:12px 6px}
+.brand .name{display:flex;align-items:center;gap:12px}
+.brand img{height:38px;width:auto}
+.brand h1{font-weight:800;font-size:1.3rem;margin:0;letter-spacing:-.01em}
+.brand h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.who{display:flex;gap:4px;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;padding:3px}
+.who button{border:0;background:transparent;color:var(--muted);font:700 .85rem var(--body);padding:6px 14px;border-radius:999px;cursor:pointer}
+.who button[aria-pressed="true"]{background:var(--grad);color:var(--navy)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{flex:none;text-decoration:none;color:var(--muted);font-weight:700;font-size:.9rem;padding:10px 12px;border-bottom:2px solid transparent}
+nav.tabs a:hover{color:#fff}
+nav.tabs a[aria-current="page"]{color:#fff;border-color:var(--sky)}
+a{color:var(--sky)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--sky);outline-offset:3px;border-radius:6px}
+main{padding-block:24px 64px}
+section[data-view]{display:grid;gap:22px}
+h2{font-weight:800;font-size:1.7rem;line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.02em}
+h3{font-weight:800;font-size:1.15rem;margin:0}
+p{margin:0;max-width:65ch}
+.lead{color:var(--muted)}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.stack{display:grid;gap:12px}
+.pitch{border-left:4px solid var(--sky);background:var(--accent-soft);border-radius:0 14px 14px 0;padding:14px 16px}
+.pitch strong{display:block;font-weight:800;font-size:1.05rem;margin-bottom:2px}
+.targets{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.target{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.target b{display:block;font-weight:800;font-size:1.9rem;line-height:1.1;font-variant-numeric:tabular-nums;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.target span{font-size:.85rem;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.step{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.step input{width:20px;height:20px;margin-top:3px;accent-color:var(--sky)}
+.step label{cursor:pointer;min-width:0}
+.step label b{font-weight:700}
+.step label small{display:block;color:var(--muted);font-size:.9rem}
+.step .mins{font-variant-numeric:tabular-nums;font-size:.8rem;font-weight:700;color:var(--sky);background:var(--accent-soft);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.step.done{opacity:.6}.step.done label b{text-decoration:line-through}
+.step.break{background:var(--amber-soft);border-color:transparent}
+.step.break .mins{background:rgba(255,255,255,.08);color:var(--amber)}
+.progress{height:6px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--grad);width:0;transition:width .3s}
+@media (prefers-reduced-motion:reduce){.progress i{transition:none}html{scroll-behavior:auto}}
+.script{display:grid;gap:10px}
+.script blockquote{margin:0;background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:12px;padding:12px 14px;white-space:pre-wrap}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.btn{font:700 .9rem var(--body);border-radius:999px;padding:9px 18px;cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink)}
+.btn:hover{background:rgba(255,255,255,.12)}
+.btn.primary{background:var(--grad);border-color:transparent;color:var(--navy)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.small{padding:5px 13px;font-size:.82rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+ul.plain{margin:0;padding-left:20px;display:grid;gap:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.82rem;background:var(--accent-soft);color:var(--ice);border-radius:999px;padding:3px 11px;font-weight:600}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+tr:last-child td{border-bottom:0}
+.do td:first-child{color:var(--good)}.do td:last-child{color:var(--warn)}
+form.report{display:grid;gap:16px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:540px){.fields{grid-template-columns:1fr}}
+.field{display:grid;gap:6px;min-width:0}
+.field label{font-weight:700;font-size:.9rem}
+.field .hint{font-size:.8rem;color:var(--muted)}
+input[type=number],input[type=date],input[type=text],textarea,select{font:inherit;color:var(--ink);background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:12px;padding:9px 12px;width:100%;min-width:0}
+select option{background:var(--surface-solid);color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+.stepper{display:grid;grid-template-columns:42px 1fr 42px;gap:6px}
+.stepper button{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);border-radius:12px;font-size:1.2rem;cursor:pointer}
+.stepper input{text-align:center;font-variant-numeric:tabular-nums;font-weight:700}
+.feel{display:flex;gap:8px;flex-wrap:wrap}
+.feel label{display:flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;font-weight:600}
+.feel input{accent-color:var(--sky)}
+.status{font-size:.9rem;padding:10px 14px;border-radius:12px}
+.status.ok{background:var(--good-soft);color:var(--good)}
+.status.err{background:var(--warn-soft);color:var(--warn)}
+.status.info{background:var(--accent-soft);color:var(--ice)}
+.foot{border-top:1px solid var(--line);padding-block:20px;color:var(--muted);font-size:.85rem}
+
+.weeknav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.weeknav b{font-variant-numeric:tabular-nums}
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:grid;gap:12px}
+.card h3 small{font-size:.85rem;color:var(--muted);font-weight:500;margin-left:6px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:.92rem;margin:0}
+.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.pill{display:inline-block;font-size:.75rem;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.pill.pass{background:var(--good-soft);color:var(--good)}.pill.miss{background:var(--warn-soft);color:var(--warn)}
+.pill.feel-too{background:var(--warn-soft);color:var(--warn)}.pill.feel-fine{background:var(--accent-soft);color:var(--ice)}.pill.feel-easy{background:var(--good-soft);color:var(--good)}
+.days{display:flex;gap:6px}
+.days span{flex:1;text-align:center;font-size:.72rem;font-weight:700;border-radius:8px;padding:6px 0;background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--line)}
+.days span.pass{background:var(--good-soft);color:var(--good);border-color:transparent}
+.days span.miss{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.empty{border:1px dashed var(--line);border-radius:18px;padding:22px;text-align:center;color:var(--muted)}
+td.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.wide{max-width:1000px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap wide">
+    <div class="brand">
+      <div class="name"><img src="../../assets/img/udokk-logo.svg" alt="" width="34" height="38"><h1>Outreach <span>scorecard</span></h1></div>
+      <a class="btn small" href="../" style="text-decoration:none">Team page</a>
+    </div>
+  </div>
+</header>
+<main class="wrap wide">
+<section data-view="reports">
+  <div class="stack">
+    <h2>Weekly scorecard</h2>
+    <p class="lead">A day passes when 10 Instagram DMs, 10 Instagram comments and 10 TikTok comments are logged. Check "how it felt" too: two "too much" days in a week means ease off.</p>
+  </div>
+  <div class="weeknav">
+    <button class="btn small" type="button" id="wk-prev">Previous week</button>
+    <b id="wk-label">This week</b>
+    <button class="btn small" type="button" id="wk-next">Next week</button>
+    <button class="btn small" type="button" id="refresh">Refresh</button>
+  </div>
+  <div class="score" id="score"></div>
+  <div class="stack">
+    <h3>Daily reports</h3>
+    <div id="report-list"></div>
+  </div>
+</section>
+</main>
+<div class="wrap wide foot">Admin only. Reports come from the team's End of day form.</div>
+<script>
+(function(){
+  const PRODUCT = {Katie: "Udokk", Medha: "Dokkcast"};
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const pad = n => String(n).padStart(2, "0");
+  const iso = d => d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate());
+  const fmtDay = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d).toLocaleDateString("en-GB", {weekday:"short", day:"numeric", month:"short"}); };
+  const passes = r => r.igDms >= 10 && r.igComments >= 10 && r.ttComments >= 10;
+  let reports = [], weekOffset = 0, loaded = false, failed = false;
+
+  function monday(offset){
+    const d = new Date(); d.setHours(0,0,0,0);
+    const dow = (d.getDay() + 6) % 7; d.setDate(d.getDate() - dow + offset * 7); return d;
+  }
+  $("#wk-prev").addEventListener("click", () => { weekOffset--; render(); });
+  $("#wk-next").addEventListener("click", () => { if (weekOffset < 0){ weekOffset++; render(); } });
+  $("#refresh").addEventListener("click", load);
+
+  function render(){
+    const mon = monday(weekOffset);
+    const days = [...Array(5)].map((_, i) => { const d = new Date(mon); d.setDate(mon.getDate() + i); return iso(d); });
+    $("#wk-label").textContent = "Week of " + fmtDay(days[0]);
+    $("#wk-next").disabled = weekOffset >= 0;
+    const inWeek = reports.filter(r => r.date >= days[0] && r.date <= days[4]);
+    const score = $("#score"); score.innerHTML = "";
+    ["Katie","Medha"].forEach(name => {
+      const rs = inWeek.filter(r => r.name === name);
+      const byDay = Object.fromEntries(rs.map(r => [r.date, r]));
+      const sum = k => rs.reduce((a, r) => a + (Number(r[k]) || 0), 0);
+      const dms = sum("igDms"), reps = sum("replies");
+      const rate = dms ? Math.round(reps / dms * 100) + "%" : "\u2013";
+      const card = document.createElement("div"); card.className = "card";
+      card.innerHTML =
+        '<h3>' + name + '<small>' + PRODUCT[name] + '</small></h3>' +
+        '<div class="days">' + days.map(d => { const r = byDay[d]; const cls = r ? (passes(r) ? "pass" : "miss") : ""; return '<span class="' + cls + '" title="' + fmtDay(d) + (r ? (passes(r) ? ": targets met" : ": below target") : ": no report") + '">' + fmtDay(d).slice(0,3) + '</span>'; }).join("") + '</div>' +
+        '<dl class="kv">' +
+          '<dt>Days on target</dt><dd>' + rs.filter(passes).length + ' / 5</dd>' +
+          '<dt>Instagram DMs</dt><dd>' + dms + ' / 50</dd>' +
+          '<dt>Instagram comments</dt><dd>' + sum("igComments") + ' / 50</dd>' +
+          '<dt>TikTok comments</dt><dd>' + sum("ttComments") + ' / 50</dd>' +
+          '<dt>Reply rate</dt><dd>' + rate + '</dd>' +
+          '<dt>Interested leads</dt><dd>' + sum("interested") + '</dd>' +
+          '<dt>"Too much" days</dt><dd>' + rs.filter(r => r.feel === "Too much").length + '</dd>' +
+        '</dl>';
+      score.appendChild(card);
+    });
+    const list = $("#report-list");
+    if (failed){ list.innerHTML = '<div class="empty">Reports couldn\'t load. Check your connection and press Refresh.</div>'; return; }
+    if (!loaded){ list.innerHTML = '<div class="empty">Loading\u2026</div>'; return; }
+    if (!inWeek.length){ list.innerHTML = '<div class="empty">No reports for this week yet. They appear here as soon as Katie or Medha sends the End of day form.</div>'; return; }
+    const rows = inWeek.slice().sort((a, b) => b.date.localeCompare(a.date) || a.name.localeCompare(b.name)).map(r => {
+      const feelCls = r.feel === "Too much" ? "feel-too" : r.feel === "Easy" ? "feel-easy" : "feel-fine";
+      const notes = [r.leads && ("Leads: " + r.leads), r.best && ("Best: " + r.best), r.problems && ("Problems: " + r.problems)].filter(Boolean).map(esc).join("<br>");
+      return '<tr><td>' + fmtDay(r.date) + '</td><td>' + esc(r.name) + '</td>' +
+        '<td><span class="pill ' + (passes(r) ? "pass" : "miss") + '">' + (passes(r) ? "On target" : "Below") + '</span></td>' +
+        '<td class="num">' + (r.igDms|0) + ' / ' + (r.igComments|0) + ' / ' + (r.ttComments|0) + '</td>' +
+        '<td class="num">' + (r.replies|0) + '</td><td class="num">' + (r.interested|0) + '</td>' +
+        '<td><span class="pill ' + feelCls + '">' + esc(r.feel || "Fine") + '</span></td>' +
+        '<td style="min-width:220px">' + (notes || '<span class="lead">\u2013</span>') + '</td></tr>';
+    }).join("");
+    list.innerHTML = '<div class="tablewrap"><table><thead><tr><th>Day</th><th>Who</th><th>Targets</th><th>IG DMs / IG comm. / TT comm.</th><th>Replies</th><th>Leads</th><th>Felt</th><th>Notes</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
+
+  async function load(){
+    failed = false;
+    try {
+      const res = await fetch("/outreach-hq/scorecard/data", {credentials: "same-origin", cache: "no-store"});
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      reports = ((await res.json()).reports || []).filter(r => r && typeof r.date === "string" && PRODUCT[r.name]);
+      loaded = true;
+    } catch(e){ failed = true; }
+    render();
+  }
+  render(); load();
+})();
+</script>
+</body>
+</html>

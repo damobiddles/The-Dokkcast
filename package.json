@@ -1,0 +1,8 @@
+{
+  "name": "the-dokkcast",
+  "private": true,
+  "description": "Static site built by tools/build.py. Node is only used by the Netlify Functions under netlify/.",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.6"
+  }
+}

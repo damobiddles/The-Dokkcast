@@ -4,6 +4,9 @@
   command = "python3 tools/build.py"
   publish = "."
 
+  [build.environment]
+    NODE_VERSION = "22"   # the Outreach HQ functions use @netlify/blobs, which needs Node 22.12 or newer
+
 # One canonical address for each page: send www to the main domain, and common short or extensionless
 # addresses to the real page, so typed or shared links never hit a 404.
 [[redirects]]
@@ -72,6 +75,26 @@
   status = 301
 
 # Keep source folders out of the public site.
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/node_modules/*"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/package.json"
+  to = "/404.html"
+  status = 404
+  force = true
+[[redirects]]
+  from = "/package-lock.json"
+  to = "/404.html"
+  status = 404
+  force = true
 [[redirects]]
   from = "/pages/*"
   to = "/404.html"

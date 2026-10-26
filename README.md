@@ -170,6 +170,13 @@ Search the `pages/` folder for `class="placeholder"`. These need real content:
 udokk logo (`assets/img/udokk-logo.svg`), Manrope (SIL OFL licence in `assets/fonts`), and the
 logo gradient `#716BE8` to `#A5D7FF` on navy.
 
-## Outreach HQ (internal page)
+## Outreach HQ (internal, password protected)
 
-`outreach-hq/index.html` is a standalone page for the Udokk outreach team (Today checklist, DM scripts, who to contact, rules, end-of-day form). It is not built by `tools/build.py`, is not in the nav or sitemap, and is marked `noindex` (meta tag plus an `X-Robots-Tag` header in `netlify.toml`). The end-of-day form uses Netlify Forms (form name `outreach-report`): view submissions in Netlify under Forms, and add an email notification there if you want them sent to you.
+`outreach-hq/index.html` is a standalone page for the Udokk outreach team (Today checklist, DM scripts, who to contact, rules, end-of-day form). `outreach-hq/scorecard/index.html` is the admin scorecard. Neither is built by `tools/build.py`, linked from the site or listed in the sitemap, and both are `noindex`.
+
+- **Passwords** are checked by the edge function `netlify/edge-functions/outreach-auth.ts` (browser login box). Set two environment variables in Netlify (Site configuration > Environment variables); no passwords are stored in the repo:
+  - `OUTREACH_TEAM_PASSWORD`: one shared password for the team page and the report form (any username).
+  - `OUTREACH_ADMIN_USERS`: admin logins for the scorecard as `name:password` pairs separated by commas, for example `damien:longpass1,partner:longpass2`. Admins can open the team page too.
+  - If a variable is missing, that area stays locked. Redeploy after changing them.
+- **Reports** are saved by `netlify/functions/outreach-report.mjs` into Netlify Blobs (one report per person per day; sending again replaces it). The scorecard reads them through `netlify/functions/outreach-scorecard-data.mjs`.
+- Needs `package.json` (`@netlify/blobs`) and Node 22, set in `netlify.toml`.

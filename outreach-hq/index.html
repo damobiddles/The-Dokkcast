@@ -251,9 +251,7 @@ textarea{min-height:76px;resize:vertical}
     <h2 id="form-title">End-of-day report</h2>
     <p class="lead">Two minutes, before you finish. Be honest: a short day is fine, a missing report isn't.</p>
   </div>
-  <form class="report panel" id="report-form" name="outreach-report" method="POST" action="/outreach-hq/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-    <input type="hidden" name="form-name" value="outreach-report">
-    <p hidden><label>Do not fill this in: <input name="bot-field"></label></p>
+  <form class="report panel" id="report-form" novalidate>
     <div class="fields">
       <div class="field"><label for="f-name">Name</label>
         <select id="f-name" name="name"><option>Katie</option><option>Medha</option></select></div>
@@ -284,7 +282,7 @@ textarea{min-height:76px;resize:vertical}
 </section>
 
 </main>
-<div class="wrap foot">Internal page for the Udokk outreach team. Please don't share the link.</div>
+<div class="wrap foot">Internal page for the Udokk outreach team. Please don't share the link. <a href="scorecard/">Admin scorecard</a></div>
 <script>
 (function(){
   const PEOPLE = {
@@ -414,14 +412,16 @@ textarea{min-height:76px;resize:vertical}
     const date = $("#f-date").value;
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)){ status("err", "Pick the date this report is for."); return; }
     const name = $("#f-name").value;
-    const fd = new FormData(form);
-    fd.set("submitted_at", new Date().toISOString());
+    const body = {
+      name, date, igDms: num("f-igdm"), igComments: num("f-igc"), ttComments: num("f-ttc"), ttDms: num("f-ttdm"),
+      replies: num("f-rep"), interested: num("f-int"),
+      leads: $("#f-leads").value.trim(), best: $("#f-best").value.trim(), problems: $("#f-prob").value.trim(),
+      feel: (document.querySelector('input[name="feel"]:checked') || {}).value || "Fine"
+    };
     const btn = $("#f-submit"); btn.disabled = true; status("info", "Sending\u2026");
     try {
-      const res = await fetch(form.getAttribute("action"), {
-        method: "POST",
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: new URLSearchParams(fd).toString()
+      const res = await fetch("/outreach-hq/api/report", {
+        method: "POST", headers: {"Content-Type": "application/json"}, credentials: "same-origin", body: JSON.stringify(body)
       });
       if (!res.ok) throw new Error("HTTP " + res.status);
       status("ok", "Report sent for " + name + ", " + fmtDay(date) + ". Thanks, that's you done for the day.");
