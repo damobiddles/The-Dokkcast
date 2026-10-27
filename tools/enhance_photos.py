@@ -20,6 +20,7 @@ SRC, DST = ROOT / "assets/img/source", ROOT / "assets/img"
 PHOTOS = {
     "studio-wide": {}, "studio-behind-the-scenes": {}, "conversation-pair": {}, "group-of-four": {},
     "guests-pair-portrait": {}, "john-deanfield-conversation": {}, "home-studio": {}, "about-studio": {}, "guests-studio-1": {}, "guests-studio-2": {},
+    "upcoming-guests-1": {}, "upcoming-guests-2": {}, "upcoming-guests-3": {}, "upcoming-guests-4": {},
     "nara": {"cutoff": 0.05, "contrast": 0.18, "saturation": 0.97, "sharpen": 35},
 }
 

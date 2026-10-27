@@ -17,12 +17,33 @@ def _safe_url(u):
     return u if not re.match(r"(?i)^(javascript|data|vbscript):", u) else "#"
 
 
+def _jpeg_size(path):
+    """(width, height) of a local JPEG, read from its SOF header so the build needs no Pillow; None if unreadable."""
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    i = 2
+    while i + 9 < len(data) and data[i] == 0xFF:
+        marker, length = data[i + 1], int.from_bytes(data[i + 2:i + 4], "big")
+        if marker in (0xC0, 0xC1, 0xC2):
+            return int.from_bytes(data[i + 7:i + 9], "big"), int.from_bytes(data[i + 5:i + 7], "big")
+        i += 2 + length
+    return None
+
+
+def _img_size(url):
+    """ width/height attributes for a local JPEG in the post body, so the page doesn't shift as images load."""
+    size = _jpeg_size(ROOT / url) if re.match(r"(?i)^[\w./-]+\.jpe?g$", url) else None
+    return f' width="{size[0]}" height="{size[1]}"' if size else ""
+
+
 def _inline(s):
     s = html.escape(s, quote=False)
     codes = []
     s = re.sub(r"`([^`]+)`", lambda m: (codes.append(m.group(1)) or f"\x00{len(codes) - 1}\x00"), s)
     s = re.sub(r"!\[([^\]]*)\]\(([^)\s]+)\)",
-               lambda m: f'<img src="{esc(_safe_url(m.group(2)), True)}" alt="{esc(m.group(1), True)}" loading="lazy">', s)
+               lambda m: f'<img src="{esc(_safe_url(m.group(2)), True)}" alt="{esc(m.group(1), True)}"{_img_size(m.group(2))} loading="lazy">', s)
 
     def link(m):
         url = _safe_url(m.group(2))
