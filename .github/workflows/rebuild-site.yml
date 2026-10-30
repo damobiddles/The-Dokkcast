@@ -3,7 +3,7 @@
 #
 # One-off setup: in Netlify create a build hook (Site configuration > Build & deploy > Build hooks), then add its
 # URL to this repo as a secret named NETLIFY_BUILD_HOOK (Settings > Secrets and variables > Actions).
-# Until that secret exists the job just prints a warning and does nothing.
+# Until that secret exists the job fails, so GitHub emails a failed-run notice instead of silently doing nothing.
 name: Rebuild site
 
 on:
@@ -25,8 +25,8 @@ jobs:
           HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
         run: |
           if [ -z "$HOOK" ]; then
-            echo "::warning::The NETLIFY_BUILD_HOOK secret is not set, so nothing was triggered."
-            exit 0
+            echo "::error::The NETLIFY_BUILD_HOOK secret is not set, so Netlify was not asked to rebuild and new episodes won't appear."
+            exit 1
           fi
           curl --fail --silent --show-error --max-time 30 -X POST -d '{}' "$HOOK"
           echo "Netlify build triggered."
